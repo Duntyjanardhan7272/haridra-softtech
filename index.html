@@ -481,9 +481,38 @@
             font-size: 0.9rem;
             color: #bdc3c7;
         }
+
+        /* Cart Notification Styles */
+        .cart-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
     </style>
 </head>
 <body>
+    <!-- Cart Notification -->
+    <div class="cart-notification" id="cartNotification" style="display: none;">
+        Product added to cart!
+    </div>
+
     <header>
         <div class="container header-container">
             <div class="logo">
@@ -631,7 +660,7 @@
                     <div class="product-content">
                         <h3>Finance Management Suite</h3>
                         <p>Comprehensive financial software for budgeting, accounting, and financial analysis.</p>
-                        <div class="price">$499.99</div>
+                        <div class="price">5000 rs</div>
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
@@ -640,7 +669,7 @@
                     <div class="product-content">
                         <h3>Ecommerce Platform</h3>
                         <p>Feature-rich ecommerce solution with inventory management and payment integration.</p>
-                        <div class="price">$799.99</div>
+                        <div class="price">5000 rs</div>
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
@@ -649,7 +678,7 @@
                     <div class="product-content">
                         <h3>Business Analytics Tool</h3>
                         <p>Powerful analytics platform with customizable dashboards and reporting.</p>
-                        <div class="price">$649.99</div>
+                        <div class="price">8000 rs</div>
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
@@ -658,7 +687,7 @@
                     <div class="product-content">
                         <h3>API Gateway</h3>
                         <p>Secure and scalable API management solution for enterprise applications.</p>
-                        <div class="price">$899.99</div>
+                        <div class="price">5000 rs</div>
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
@@ -758,6 +787,7 @@
         // User accounts storage (in a real app, this would be on the server)
         let users = JSON.parse(localStorage.getItem('haridraUsers')) || [];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let cart = JSON.parse(localStorage.getItem('haridraCart')) || [];
 
         // DOM elements
         const modal = document.getElementById('authModal');
@@ -787,6 +817,59 @@
                 });
             }
         }
+
+        // Function to update cart count in header
+        function updateCartCount() {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.querySelector('a[href="#cart"]').textContent = `Cart (${cartCount})`;
+        }
+
+        // Function to show cart notification
+        function showCartNotification() {
+            const notification = document.getElementById('cartNotification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Add to cart functionality
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (!currentUser) {
+                    alert('Please login to add items to cart');
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                    return;
+                }
+
+                const productCard = e.target.closest('.product-card');
+                const product = {
+                    id: productCard.querySelector('h3').textContent.toLowerCase().replace(/\s+/g, '-'),
+                    name: productCard.querySelector('h3').textContent,
+                    price: parseFloat(productCard.querySelector('.price').textContent.replace(' rs', '')),
+                    image: productCard.querySelector('img').src,
+                    description: productCard.querySelector('p').textContent,
+                    quantity: 1
+                };
+
+                // Check if product already exists in cart
+                const existingItem = cart.find(item => item.id === product.id);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push(product);
+                }
+
+                // Save to localStorage and update UI
+                localStorage.setItem('haridraCart', JSON.stringify(cart));
+                updateCartCount();
+                showCartNotification();
+            });
+        });
+
+        // Initialize cart count on page load
+        updateCartCount();
 
         // Show modal when login button is clicked
         loginBtn?.addEventListener('click', () => {
