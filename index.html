@@ -19,6 +19,12 @@
             padding: 0;
             color: #333;
             line-height: 1.6;
+            transition: margin-right 0.3s;
+        }
+        
+        body.cart-open {
+            margin-right: 350px;
+            overflow-x: hidden;
         }
         
         header {
@@ -26,6 +32,8 @@
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
         }
         
         .container {
@@ -505,12 +513,165 @@
             from { opacity: 1; }
             to { opacity: 0; }
         }
+
+        /* Cart Sidebar Styles */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 999;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .cart-header h3 {
+            margin: 0;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            padding: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            background-color: #f0f0f0;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            margin: 0 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.2rem;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .cart-total {
+            padding: 1rem;
+            border-top: 1px solid #eee;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <!-- Cart Notification -->
     <div class="cart-notification" id="cartNotification" style="display: none;">
         Product added to cart!
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Shopping Cart</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be dynamically inserted here -->
+        </div>
+        <div class="cart-total" id="cartTotal">
+            Total: 0 rs
+        </div>
+        <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
     </div>
 
     <header>
@@ -529,7 +690,7 @@
                     <li><a href="#products">Products</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#contact">Contact</a></li>
-                    <li><a href="#cart">Cart (0)</a></li>
+                    <li><a href="#" id="cartLink">Cart (<span id="cartCount">0</span>)</a></li>
                     <li id="authNavItem">
                         <button class="login-btn" id="loginBtn">Login</button>
                     </li>
@@ -784,7 +945,7 @@
     </footer>
 
     <script>
-        // User accounts storage (in a real app, this would be on the server)
+        // User accounts storage (persists in localStorage)
         let users = JSON.parse(localStorage.getItem('haridraUsers')) || [];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
         let cart = JSON.parse(localStorage.getItem('haridraCart')) || [];
@@ -798,6 +959,13 @@
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
         const authNavItem = document.getElementById('authNavItem');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCart = document.getElementById('closeCart');
+        const cartLink = document.getElementById('cartLink');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const cartCount = document.getElementById('cartCount');
 
         // Update UI based on login state
         function updateAuthUI() {
@@ -820,8 +988,9 @@
 
         // Function to update cart count in header
         function updateCartCount() {
-            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-            document.querySelector('a[href="#cart"]').textContent = `Cart (${cartCount})`;
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = count;
+            localStorage.setItem('haridraCart', JSON.stringify(cart));
         }
 
         // Function to show cart notification
@@ -833,206 +1002,298 @@
             }, 3000);
         }
 
-        // Add to cart functionality
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', (e) => {
-                if (!currentUser) {
-                    alert('Please login to add items to cart');
-                    modal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                    return;
-                }
+        // Function to render cart items
+        function renderCartItems() {
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                cartTotal.textContent = 'Total: 0 rs';
+                return;
+            }
 
-                const productCard = e.target.closest('.product-card');
-                const product = {
-                    id: productCard.querySelector('h3').textContent.toLowerCase().replace(/\s+/g, '-'),
-                    name: productCard.querySelector('h3').textContent,
-                    price: parseFloat(productCard.querySelector('.price').textContent.replace(' rs', '')),
-                    image: productCard.querySelector('img').src,
-                    description: productCard.querySelector('p').textContent,
-                    quantity: 1
-                };
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
 
-                // Check if product already exists in cart
-                const existingItem = cart.find(item => item.id === product.id);
-                if (existingItem) {
-                    existingItem.quantity += 1;
-                } else {
-                    cart.push(product);
-                }
-
-                // Save to localStorage and update UI
-                localStorage.setItem('haridraCart', JSON.stringify(cart));
-                updateCartCount();
-                showCartNotification();
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price">${item.price} rs</div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn minus" data-index="${index}">-</button>
+                            <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-index="${index}">
+                            <button class="quantity-btn plus" data-index="${index}">+</button>
+                        </div>
+                        <button class="remove-item" data-index="${index}">Remove</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItem);
             });
-        });
 
-        // Initialize cart count on page load
+            cartTotal.textContent = `Total: ${total} rs`;
+
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    if (cart[index].quantity > 1) {
+                        cart[index].quantity--;
+                        renderCartItems();
+                        updateCartCount();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    cart[index].quantity++;
+                    renderCartItems();
+                    updateCartCount();
+                });
+            });
+
+document.querySelectorAll('.quantity-input').forEach(input => {
+    input.addEventListener('change', (e) => {
+        const index = e.target.getAttribute('data-index');
+        const newQuantity = parseInt(e.target.value);
+        if (newQuantity > 0) {
+            cart[index].quantity = newQuantity;
+            renderCartItems();
+            updateCartCount();
+        } else {
+            e.target.value = cart[index].quantity;
+        }
+    });
+});
+
+document.querySelectorAll('.remove-item').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const index = e.target.getAttribute('data-index');
+        cart.splice(index, 1);
+        renderCartItems();
         updateCartCount();
+    });
+});
+}
 
-        // Show modal when login button is clicked
-        loginBtn?.addEventListener('click', () => {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+// Login function
+function login(email, password) {
+const user = users.find(u => u.email === email && u.password === password);
+if (user) {
+    currentUser = user;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    updateAuthUI();
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    return true;
+}
+return false;
+}
+
+// Register function
+function register(name, email, password) {
+// Check if user already exists
+if (users.some(u => u.email === email)) {
+    return false;
+}
+
+const newUser = {
+    id: Date.now().toString(),
+    name,
+    email,
+    password
+};
+
+users.push(newUser);
+localStorage.setItem('haridraUsers', JSON.stringify(users));
+currentUser = newUser;
+localStorage.setItem('currentUser', JSON.stringify(currentUser));
+updateAuthUI();
+return true;
+}
+
+// Logout function
+function logout() {
+currentUser = null;
+localStorage.removeItem('currentUser');
+updateAuthUI();
+}
+
+// Validate password match
+function validatePasswordMatch(password, confirmPassword) {
+return password === confirmPassword;
+}
+
+// Event listeners
+loginBtn.addEventListener('click', () => {
+modal.style.display = 'flex';
+document.body.style.overflow = 'hidden';
+});
+
+closeModal.addEventListener('click', () => {
+modal.style.display = 'none';
+document.body.style.overflow = 'auto';
+});
+
+showRegister.addEventListener('click', () => {
+loginForm.style.display = 'none';
+registerForm.style.display = 'block';
+});
+
+showLogin.addEventListener('click', () => {
+registerForm.style.display = 'none';
+loginForm.style.display = 'block';
+});
+
+// Login form submission
+document.getElementById('login').addEventListener('submit', (e) => {
+e.preventDefault();
+const email = document.getElementById('loginEmail').value;
+const password = document.getElementById('loginPassword').value;
+
+if (login(email, password)) {
+    // Success
+    document.getElementById('loginEmailError').style.display = 'none';
+    document.getElementById('loginPasswordError').style.display = 'none';
+} else {
+    // Error
+    document.getElementById('loginEmailError').textContent = 'Invalid email or password';
+    document.getElementById('loginEmailError').style.display = 'block';
+    document.getElementById('loginPasswordError').style.display = 'none';
+}
+});
+
+// Register form submission
+document.getElementById('register').addEventListener('submit', (e) => {
+e.preventDefault();
+const name = document.getElementById('regName').value;
+const email = document.getElementById('regEmail').value;
+const password = document.getElementById('regPassword').value;
+const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+// Reset errors
+document.getElementById('regNameError').style.display = 'none';
+document.getElementById('regEmailError').style.display = 'none';
+document.getElementById('regPasswordError').style.display = 'none';
+document.getElementById('regConfirmPasswordError').style.display = 'none';
+
+// Validate
+let isValid = true;
+
+if (name.length < 3) {
+    document.getElementById('regNameError').textContent = 'Name must be at least 3 characters';
+    document.getElementById('regNameError').style.display = 'block';
+    isValid = false;
+}
+
+if (!email.includes('@')) {
+    document.getElementById('regEmailError').textContent = 'Please enter a valid email';
+    document.getElementById('regEmailError').style.display = 'block';
+    isValid = false;
+}
+
+if (password.length < 6) {
+    document.getElementById('regPasswordError').textContent = 'Password must be at least 6 characters';
+    document.getElementById('regPasswordError').style.display = 'block';
+    isValid = false;
+}
+
+if (!validatePasswordMatch(password, confirmPassword)) {
+    document.getElementById('regConfirmPasswordError').textContent = 'Passwords do not match';
+    document.getElementById('regConfirmPasswordError').style.display = 'block';
+    isValid = false;
+}
+
+if (isValid) {
+    if (register(name, email, password)) {
+        // Success
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    } else {
+        document.getElementById('regEmailError').textContent = 'Email already registered';
+        document.getElementById('regEmailError').style.display = 'block';
+    }
+}
+});
+
+// Cart functionality
+cartLink.addEventListener('click', (e) => {
+e.preventDefault();
+cartSidebar.classList.add('open');
+document.body.classList.add('cart-open');
+});
+
+closeCart.addEventListener('click', () => {
+cartSidebar.classList.remove('open');
+document.body.classList.remove('cart-open');
+});
+
+// Close cart when clicking outside
+modal.addEventListener('click', (e) => {
+if (e.target === modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+});
+
+// Add to cart buttons
+document.querySelectorAll('.add-to-cart').forEach(btn => {
+btn.addEventListener('click', (e) => {
+    if (!currentUser) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        return;
+    }
+    
+    const productCard = e.target.closest('.product-card');
+    const productName = productCard.querySelector('h3').textContent;
+    const productPrice = parseInt(productCard.querySelector('.price').textContent);
+    const productImage = productCard.querySelector('img').src;
+    
+    // Check if product already in cart
+    const existingItem = cart.find(item => item.name === productName);
+    
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({
+            name: productName,
+            price: productPrice,
+            image: productImage,
+            quantity: 1
         });
+    }
+    
+    renderCartItems();
+    updateCartCount();
+    showCartNotification();
+});
+});
 
-        // Close modal when X is clicked
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
+// Checkout button
+checkoutBtn.addEventListener('click', () => {
+if (cart.length === 0) return;
 
-        // Close modal when clicking outside the modal content
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
+if (confirm('Proceed to checkout?')) {
+    alert('Thank you for your purchase!');
+    cart = [];
+    localStorage.setItem('haridraCart', JSON.stringify(cart));
+    renderCartItems();
+    updateCartCount();
+    cartSidebar.classList.remove('open');
+    document.body.classList.remove('cart-open');
+}
+});
 
-        // Switch to registration form
-        showRegister.addEventListener('click', () => {
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            clearErrors();
-        });
-
-        // Switch to login form
-        showLogin.addEventListener('click', () => {
-            registerForm.style.display = 'none';
-            loginForm.style.display = 'block';
-            clearErrors();
-        });
-
-        // Clear all error messages
-        function clearErrors() {
-            document.querySelectorAll('.error-message').forEach(el => {
-                el.style.display = 'none';
-                el.textContent = '';
-            });
-        }
-
-        // Show error message for a specific field
-        function showError(fieldId, message) {
-            const errorElement = document.getElementById(fieldId + 'Error');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-
-        // Login form submission
-        document.getElementById('login').addEventListener('submit', (e) => {
-            e.preventDefault();
-            clearErrors();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Validate inputs
-            if (!email) {
-                showError('loginEmail', 'Email is required');
-                return;
-            }
-            
-            if (!password) {
-                showError('loginPassword', 'Password is required');
-                return;
-            }
-            
-            // Check if user exists
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                // Successful login
-                currentUser = user;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                updateAuthUI();
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                alert(`Welcome back, ${user.name}!`);
-            } else {
-                showError('loginPassword', 'Invalid email or password');
-            }
-        });
-
-        // Registration form submission
-        document.getElementById('register').addEventListener('submit', (e) => {
-            e.preventDefault();
-            clearErrors();
-            
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-            
-            // Validate inputs
-            if (!name) {
-                showError('regName', 'Full name is required');
-                return;
-            }
-            
-            if (!email) {
-                showError('regEmail', 'Email is required');
-                return;
-            }
-            
-            if (!password) {
-                showError('regPassword', 'Password is required');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showError('regPassword', 'Password must be at least 6 characters');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showError('regConfirmPassword', 'Passwords do not match');
-                return;
-            }
-            
-            // Check if email already exists
-            if (users.some(u => u.email === email)) {
-                showError('regEmail', 'Email already registered');
-                return;
-            }
-            
-            // Create new user
-            const newUser = {
-                name,
-                email,
-                password
-            };
-            
-            users.push(newUser);
-            localStorage.setItem('haridraUsers', JSON.stringify(users));
-            
-            // Auto-login the new user
-            currentUser = newUser;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            updateAuthUI();
-            
-            // Show success message and switch to login form
-            alert('Registration successful! You are now logged in.');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            
-            // Reset form
-            document.getElementById('register').reset();
-            registerForm.style.display = 'none';
-            loginForm.style.display = 'block';
-        });
-
-        // Logout function
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            updateAuthUI();
-            alert('You have been logged out.');
-        }
-
-        // Initialize the UI
-        updateAuthUI();
-    </script>
+// Initialize
+updateAuthUI();
+renderCartItems();
+updateCartCount();
+</script>
 </body>
 </html>
