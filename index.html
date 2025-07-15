@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARIDRA SOFTTECH PRIVATE LIMITED - IT Solutions & Ecommerce</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 15px;
+        }
+        
+        .logo-text h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .logo-text span {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .login-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: none;
+            font-weight: 500;
+        }
+        
+        .login-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        
+        .user-profile span {
+            margin-right: 10px;
+        }
+        
+        .logout-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .logout-btn:hover {
+            text-decoration: underline;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .auth-container {
+            display: flex;
+        }
+        
+        .auth-form {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .auth-form h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-submit {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .form-submit:hover {
+            background-color: #2980b9;
+        }
+        
+        .form-switch {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+        
+        .form-switch a {
+            color: var(--secondary-color);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .auth-divider {
+            position: relative;
+            margin: 2rem 0;
+            text-align: center;
+            color: #666;
+        }
+        
+        .auth-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #ddd;
+            z-index: -1;
+        }
+        
+        .auth-divider span {
+            background-color: white;
+            padding: 0 1rem;
+        }
+        
+        .error-message {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .services {
+            padding: 4rem 0;
+            background-color: var(--light-color);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .service-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .service-content {
+            padding: 1.5rem;
+        }
+        
+        .service-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .products {
+            padding: 4rem 0;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .product-content {
+            padding: 1.5rem;
+        }
+        
+        .product-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .price {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        
+        .add-to-cart {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-top: 0;
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="haridra.jpg" alt="HARIDRA SOFTTECH PRIVATE LIMITED Logo">
+                <div class="logo-text">
+                    <h1>HARIDRA SOFTTECH</h1>
+                    <span>PRIVATE LIMITED</span>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#cart">Cart (0)</a></li>
+                    <li id="authNavItem">
+                        <button class="login-btn" id="loginBtn">Login</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Login/Registration Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to Haridra Softtech</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="auth-container">
+                <div class="auth-form" id="loginForm">
+                    <h3>Login</h3>
+                    <form id="login">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                            <div class="error-message" id="loginEmailError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                            <div class="error-message" id="loginPasswordError"></div>
+                        </div>
+                        <button type="submit" class="form-submit">Login</button>
+                    </form>
+                    <div class="form-switch">
+                        Don't have an account? <a id="showRegister">Register</a>
+                    </div>
+                </div>
+                
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+                
+                <div class="auth-form" id="registerForm" style="display: none;">
+                    <h3>Register</h3>
+                    <form id="register">
+                        <div class="form-group">
+                            <label for="regName">Full Name</label>
+                            <input type="text" id="regName" required>
+                            <div class="error-message" id="regNameError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" required>
+                            <div class="error-message" id="regEmailError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Password (min 6 characters)</label>
+                            <input type="password" id="regPassword" required minlength="6">
+                            <div class="error-message" id="regPasswordError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirmPassword">Confirm Password</label>
+                            <input type="password" id="regConfirmPassword" required>
+                            <div class="error-message" id="regConfirmPasswordError"></div>
+                        </div>
+                        <button type="submit" class="form-submit">Register</button>
+                    </form>
+                    <div class="form-switch">
+                        Already have an account? <a id="showLogin">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Innovative IT Solutions & Ecommerce Services</h2>
+            <p>Haridra Softtech Private Limited provides cutting-edge business intelligence, IT consultation, web applications, and API integration services to help your business thrive in the digital age.</p>
+            <a href="#products" class="btn">Explore Our Products</a>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Business Intelligence">
+                    <div class="service-content">
+                        <h3>Business Intelligence</h3>
+                        <p>Transform your data into actionable insights with our advanced BI solutions that drive informed decision-making.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="IT Consultation">
+                    <div class="service-content">
+                        <h3>IT Consultation</h3>
+                        <p>Expert guidance to align your technology strategy with business objectives for maximum efficiency.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Web Applications">
+                    <div class="service-content">
+                        <h3>Web Applications</h3>
+                        <p>Custom web applications designed to streamline your operations and enhance user experience.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="API Integration">
+                    <div class="service-content">
+                        <h3>API Integration</h3>
+                        <p>Seamless integration of disparate systems through robust API solutions that enhance functionality.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products" id="products">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Products</h2>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Finance Management Suite">
+                    <div class="product-content">
+                        <h3>Finance Management Suite</h3>
+                        <p>Comprehensive financial software for budgeting, accounting, and financial analysis.</p>
+                        <div class="price">$499.99</div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Ecommerce Platform">
+                    <div class="product-content">
+                        <h3>Ecommerce Platform</h3>
+                        <p>Feature-rich ecommerce solution with inventory management and payment integration.</p>
+                        <div class="price">$799.99</div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Business Analytics Tool">
+                    <div class="product-content">
+                        <h3>Business Analytics Tool</h3>
+                        <p>Powerful analytics platform with customizable dashboards and reporting.</p>
+                        <div class="price">$649.99</div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="API Gateway">
+                    <div class="product-content">
+                        <h3>API Gateway</h3>
+                        <p>Secure and scalable API management solution for enterprise applications.</p>
+                        <div class="price">$899.99</div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about" style="padding: 4rem 0; background-color: var(--light-color);">
+        <div class="container">
+            <div class="section-title">
+                <h2>About Haridra Softtech</h2>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p>Haridra Softtech Private Limited is a Telangana-based IT company specializing in business intelligence, IT consultation, web applications, and API integration. Our highly skilled technology workforce delivers innovative solutions tailored to your business needs.</p>
+                <p>We combine technical expertise with business acumen to create products and services that drive efficiency, growth, and competitive advantage for our clients across various industries.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact" style="padding: 4rem 0;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <h3 style="color: var(--primary-color);">Get in Touch</h3>
+                    <p>Have questions about our products or services? Reach out to our team for more information.</p>
+                    <p><strong>Email:</strong> info@haridrasofttech.com</p>
+                    <p><strong>Phone:</strong> +91 9949585248</p>
+                    <p><strong>Address:</strong> #501, 5th floor, Manjeera Trinity Corporate, Kukatpally - 500072</p>
+                </div>
+                <div>
+                    <form>
+                        <div style="margin-bottom: 1rem;">
+                            <label for="name" style="display: block; margin-bottom: 0.5rem;">Name</label>
+                            <input type="text" id="name" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label for="email" style="display: block; margin-bottom: 0.5rem;">Email</label>
+                            <input type="email" id="email" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label for="message" style="display: block; margin-bottom: 0.5rem;">Message</label>
+                            <textarea id="message" rows="4" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Haridra Softtech</h3>
+                    <p>Innovative IT solutions and ecommerce services to help your business thrive in the digital age.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Business Intelligence</a></li>
+                        <li><a href="#">IT Consultation</a></li>
+                        <li><a href="#">Web Applications</a></li>
+                        <li><a href="#">API Integration</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Haridra Softtech Private Limited. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // User accounts storage (in a real app, this would be on the server)
+        let users = JSON.parse(localStorage.getItem('haridraUsers')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+
+        // DOM elements
+        const modal = document.getElementById('authModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const closeModal = document.getElementById('closeModal');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const authNavItem = document.getElementById('authNavItem');
+
+        // Update UI based on login state
+        function updateAuthUI() {
+            if (currentUser) {
+                authNavItem.innerHTML = `
+                    <div class="user-profile">
+                        <span>Welcome, ${currentUser.name.split(' ')[0]}</span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                `;
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+            } else {
+                authNavItem.innerHTML = '<button class="login-btn" id="loginBtn">Login</button>';
+                document.getElementById('loginBtn').addEventListener('click', () => {
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+        }
+
+        // Show modal when login button is clicked
+        loginBtn?.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Close modal when X is clicked
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Switch to registration form
+        showRegister.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            clearErrors();
+        });
+
+        // Switch to login form
+        showLogin.addEventListener('click', () => {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            clearErrors();
+        });
+
+        // Clear all error messages
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+        }
+
+        // Show error message for a specific field
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        // Login form submission
+        document.getElementById('login').addEventListener('submit', (e) => {
+            e.preventDefault();
+            clearErrors();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Validate inputs
+            if (!email) {
+                showError('loginEmail', 'Email is required');
+                return;
+            }
+            
+            if (!password) {
+                showError('loginPassword', 'Password is required');
+                return;
+            }
+            
+            // Check if user exists
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Successful login
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateAuthUI();
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                alert(`Welcome back, ${user.name}!`);
+            } else {
+                showError('loginPassword', 'Invalid email or password');
+            }
+        });
+
+        // Registration form submission
+        document.getElementById('register').addEventListener('submit', (e) => {
+            e.preventDefault();
+            clearErrors();
+            
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            // Validate inputs
+            if (!name) {
+                showError('regName', 'Full name is required');
+                return;
+            }
+            
+            if (!email) {
+                showError('regEmail', 'Email is required');
+                return;
+            }
+            
+            if (!password) {
+                showError('regPassword', 'Password is required');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('regPassword', 'Password must be at least 6 characters');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('regConfirmPassword', 'Passwords do not match');
+                return;
+            }
+            
+            // Check if email already exists
+            if (users.some(u => u.email === email)) {
+                showError('regEmail', 'Email already registered');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                name,
+                email,
+                password
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('haridraUsers', JSON.stringify(users));
+            
+            // Auto-login the new user
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateAuthUI();
+            
+            // Show success message and switch to login form
+            alert('Registration successful! You are now logged in.');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Reset form
+            document.getElementById('register').reset();
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+
+        // Logout function
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateAuthUI();
+            alert('You have been logged out.');
+        }
+
+        // Initialize the UI
+        updateAuthUI();
+    </script>
+</body>
+</html>
