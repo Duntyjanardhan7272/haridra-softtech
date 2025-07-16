@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HARIDRA SOFTTECH PRIVATE LIMITED - IT Solutions & Ecommerce</title>
+    <title>FashionHub - Trendy Clothing & Accessories</title>
     <style>
         :root {
             --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
             --light-color: #ecf0f1;
             --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
         }
         
         body {
@@ -20,11 +22,19 @@
             color: #333;
             line-height: 1.6;
             transition: margin-right 0.3s;
+            background-color: #f5f7fa;
+        }
+        
+        body.cart-open, body.profile-open {
+            overflow-x: hidden;
         }
         
         body.cart-open {
             margin-right: 350px;
-            overflow-x: hidden;
+        }
+        
+        body.profile-open {
+            margin-left: 350px;
         }
         
         header {
@@ -56,6 +66,7 @@
         .logo img {
             height: 50px;
             margin-right: 15px;
+            border-radius: 4px;
         }
         
         .logo-text h1 {
@@ -77,6 +88,7 @@
         
         nav ul li {
             margin-left: 20px;
+            position: relative;
         }
         
         nav ul li a {
@@ -84,6 +96,8 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
+            display: flex;
+            align-items: center;
         }
         
         nav ul li a:hover {
@@ -96,35 +110,76 @@
             padding: 0.5rem 1rem;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             border: none;
             font-weight: 500;
         }
         
         .login-btn:hover {
-            background-color: #2980b9;
+            background-color: #c0392b;
+            transform: translateY(-2px);
         }
         
         .user-profile {
             display: flex;
             align-items: center;
             color: white;
+            cursor: pointer;
+            position: relative;
         }
         
-        .user-profile span {
-            margin-right: 10px;
+        .user-profile:hover .profile-dropdown {
+            display: block;
+        }
+        
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            z-index: 1000;
+            padding: 0.5rem 0;
+        }
+        
+        .profile-dropdown a {
+            color: var(--dark-color);
+            padding: 0.5rem 1rem;
+            display: block;
+            transition: all 0.2s;
+        }
+        
+        .profile-dropdown a:hover {
+            background-color: var(--light-color);
+            color: var(--secondary-color);
+            padding-left: 1.2rem;
+        }
+        
+        .profile-dropdown .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 0.5rem 0;
         }
         
         .logout-btn {
             background: none;
             border: none;
-            color: white;
+            color: var(--dark-color);
             cursor: pointer;
             font-size: 0.9rem;
+            width: 100%;
+            text-align: left;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
         }
         
         .logout-btn:hover {
-            text-decoration: underline;
+            background-color: var(--light-color);
+            color: var(--accent-color);
+            padding-left: 1.2rem;
         }
         
         /* Modal Styles */
@@ -184,6 +239,11 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .close-btn:hover {
+            transform: rotate(90deg);
         }
         
         .auth-container {
@@ -209,6 +269,7 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
+            color: var(--dark-color);
         }
         
         .form-group input {
@@ -217,6 +278,13 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
         }
         
         .form-submit {
@@ -228,12 +296,15 @@
             border-radius: 4px;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             margin-top: 1rem;
+            font-weight: 500;
         }
         
         .form-submit:hover {
-            background-color: #2980b9;
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         .form-switch {
@@ -246,6 +317,7 @@
             color: var(--secondary-color);
             cursor: pointer;
             text-decoration: none;
+            font-weight: 500;
         }
         
         .auth-divider {
@@ -279,7 +351,7 @@
         }
         
         .hero {
-            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
             color: white;
@@ -290,12 +362,14 @@
         .hero h2 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
         
         .hero p {
             font-size: 1.2rem;
             max-width: 700px;
             margin: 0 auto 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
         
         .btn {
@@ -306,14 +380,28 @@
             border-radius: 4px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         .btn:hover {
-            background-color: #2980b9;
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         
-        .services {
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d5dbdb;
+        }
+        
+        .categories {
             padding: 4rem 0;
             background-color: var(--light-color);
         }
@@ -342,35 +430,43 @@
             background-color: var(--secondary-color);
         }
         
-        .services-grid {
+        .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
         
-        .service-card {
+        .category-card {
             background-color: white;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            border: 1px solid #eee;
+            text-align: center;
         }
         
-        .service-card:hover {
+        .category-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
-        .service-card img {
+        .category-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            transition: transform 0.3s;
         }
         
-        .service-content {
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .category-content {
             padding: 1.5rem;
         }
         
-        .service-content h3 {
+        .category-content h3 {
             margin-top: 0;
             color: var(--primary-color);
         }
@@ -390,17 +486,37 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            border: 1px solid #eee;
+            position: relative;
         }
         
         .product-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
         .product-card img {
             width: 100%;
-            height: 200px;
+            height: 300px;
             object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
         
         .product-content {
@@ -410,6 +526,7 @@
         .product-content h3 {
             margin-top: 0;
             color: var(--primary-color);
+            font-size: 1.1rem;
         }
         
         .price {
@@ -419,6 +536,13 @@
             margin: 0.5rem 0;
         }
         
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+        
         .add-to-cart {
             background-color: var(--primary-color);
             color: white;
@@ -426,11 +550,15 @@
             padding: 0.5rem 1rem;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            width: 100%;
+            font-weight: 500;
         }
         
         .add-to-cart:hover {
             background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         footer {
@@ -475,11 +603,12 @@
         .footer-column ul li a {
             color: #bdc3c7;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
         }
         
         .footer-column ul li a:hover {
             color: white;
+            padding-left: 5px;
         }
         
         .copyright {
@@ -502,6 +631,14 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             z-index: 1000;
             animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-notification::before {
+            content: "✓";
+            margin-right: 10px;
+            font-size: 1.2rem;
         }
 
         @keyframes slideIn {
@@ -551,6 +688,11 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .close-cart:hover {
+            transform: rotate(90deg);
         }
 
         .cart-items {
@@ -569,6 +711,7 @@
             height: 80px;
             object-fit: cover;
             margin-right: 1rem;
+            border-radius: 4px;
         }
 
         .cart-item-details {
@@ -601,6 +744,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .quantity-btn:hover {
+            background-color: #ddd;
         }
 
         .quantity-input {
@@ -619,6 +767,12 @@
             cursor: pointer;
             font-size: 0.8rem;
             margin-top: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .remove-item:hover {
+            color: #2980b9;
+            text-decoration: underline;
         }
 
         .cart-total {
@@ -626,11 +780,12 @@
             border-top: 1px solid #eee;
             font-weight: bold;
             text-align: right;
+            font-size: 1.1rem;
         }
 
         .checkout-btn {
             display: block;
-            width: 100%;
+            width: calc(100% - 2rem);
             padding: 1rem;
             background-color: var(--secondary-color);
             color: white;
@@ -638,12 +793,15 @@
             border-radius: 4px;
             font-size: 1rem;
             cursor: pointer;
-            margin-top: 1rem;
-            transition: background-color 0.3s;
+            margin: 1rem;
+            transition: all 0.3s;
+            font-weight: 500;
         }
 
         .checkout-btn:hover {
-            background-color: #2980b9;
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .empty-cart {
@@ -651,7 +809,314 @@
             padding: 2rem;
             color: #666;
         }
+
+        /* Profile Sidebar Styles */
+        .profile-sidebar {
+            position: fixed;
+            top: 0;
+            left: -350px;
+            width: 350px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            z-index: 999;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .profile-sidebar.open {
+            left: 0;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .profile-header h3 {
+            margin: 0;
+        }
+
+        .close-profile {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .close-profile:hover {
+            transform: rotate(90deg);
+        }
+
+        .profile-content {
+            padding: 1.5rem;
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--secondary-color);
+        }
+
+        .user-name {
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+            color: var(--primary-color);
+        }
+
+        .user-email {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--light-color);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .profile-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .profile-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .profile-menu a:hover {
+            background-color: var(--light-color);
+            padding-left: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        .profile-menu a.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .profile-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Dashboard Content Styles */
+        .dashboard-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .dashboard-content.active {
+            display: block;
+        }
+
+        .dashboard-section-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+        }
+
+        .order-history {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .order-history th, .order-history td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-history th {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .order-history tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .order-status {
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background-color: #d5f5e3;
+            color: var(--success-color);
+        }
+
+        .status-pending {
+            background-color: #fef9e7;
+            color: var(--warning-color);
+        }
+
+        .status-cancelled {
+            background-color: #fadbd8;
+            color: var(--accent-color);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+        }
+
+        .save-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Size Selector */
+        .size-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .size-option {
+            border: 1px solid #ddd;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .size-option:hover {
+            border-color: var(--secondary-color);
+        }
+
+        .size-option.selected {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0.5rem;
+            }
+            
+            .auth-container {
+                flex-direction: column;
+            }
+            
+            .auth-divider {
+                margin: 0;
+                padding: 1rem 0;
+            }
+            
+            .auth-divider::before {
+                left: 2rem;
+                right: 2rem;
+            }
+            
+            .cart-sidebar, .profile-sidebar {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            body.cart-open {
+                margin-right: 100%;
+            }
+            
+            body.profile-open {
+                margin-left: 100%;
+            }
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- Cart Notification -->
@@ -669,24 +1134,186 @@
             <!-- Cart items will be dynamically inserted here -->
         </div>
         <div class="cart-total" id="cartTotal">
-            Total: 0 rs
+            Total: ₹0
         </div>
         <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+    </div>
+
+    <!-- Profile Sidebar -->
+    <div class="profile-sidebar" id="profileSidebar">
+        <div class="profile-header">
+            <h3>My Account</h3>
+            <button class="close-profile" id="closeProfile">&times;</button>
+        </div>
+        <div class="profile-content">
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=John+Doe&background=e74c3c&color=fff" alt="User Avatar" class="user-avatar" id="userAvatar">
+                <h3 class="user-name" id="userName">John Doe</h3>
+                <p class="user-email" id="userEmail">john@example.com</p>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="ordersCount">0</div>
+                    <div class="stat-label">Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="cartItemsCount">0</div>
+                    <div class="stat-label">Cart Items</div>
+                </div>
+            </div>
+            
+            <ul class="profile-menu">
+                <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" data-section="orders"><i class="fas fa-shopping-bag"></i> My Orders</a></li>
+                <li><a href="#" data-section="profile"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#" data-section="address"><i class="fas fa-map-marker-alt"></i> Address</a></li>
+                <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content" id="dashboardSection">
+        <h2 class="dashboard-section-title">Dashboard Overview</h2>
+        <p>Welcome back to your account dashboard. Here you can manage your orders, update your profile, and change your account settings.</p>
+        
+        <div class="recent-orders">
+            <h3>Recent Orders</h3>
+            <table class="order-history">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="orderHistory">
+                    <!-- Orders will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="dashboard-content" id="ordersSection">
+        <h2 class="dashboard-section-title">My Orders</h2>
+        <p>View your complete order history and track current orders.</p>
+        
+        <table class="order-history">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="fullOrderHistory">
+                <!-- Full orders will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="dashboard-content" id="profileSection">
+        <h2 class="dashboard-section-title">Profile Information</h2>
+        <p>Update your personal information and account details.</p>
+        
+        <form id="profileForm">
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" class="form-control" required>
+                </div>
+                <div class="form-col">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="profilePhone">Phone Number</label>
+                    <input type="tel" id="profilePhone" class="form-control">
+                </div>
+                <div class="form-col">
+                    <label for="profileDob">Date of Birth</label>
+                    <input type="date" id="profileDob" class="form-control">
+                </div>
+            </div>
+            
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+    </div>
+
+    <div class="dashboard-content" id="addressSection">
+        <h2 class="dashboard-section-title">My Addresses</h2>
+        <p>Manage your shipping and billing addresses.</p>
+        
+        <div id="addressList">
+            <!-- Addresses will be dynamically inserted here -->
+        </div>
+        
+        <button class="btn" id="addAddressBtn">Add New Address</button>
+    </div>
+
+    <div class="dashboard-content" id="settingsSection">
+        <h2 class="dashboard-section-title">Account Settings</h2>
+        <p>Change your password and notification preferences.</p>
+        
+        <form id="settingsForm">
+            <h3>Change Password</h3>
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" class="form-control">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" class="form-control">
+                </div>
+                <div class="form-col">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" class="form-control">
+                </div>
+            </div>
+            
+            <h3>Notification Preferences</h3>
+            <div class="form-row">
+                <div class="form-col">
+                    <label>
+                        <input type="checkbox" id="emailNotifications" checked> Email Notifications
+                    </label>
+                </div>
+                <div class="form-col">
+                    <label>
+                        <input type="checkbox" id="smsNotifications"> SMS Notifications
+                    </label>
+                </div>
+            </div>
+            
+            <button type="submit" class="save-btn">Update Settings</button>
+        </form>
     </div>
 
     <header>
         <div class="container header-container">
             <div class="logo">
-                <img src="haridra.jpg" alt="HARIDRA SOFTTECH PRIVATE LIMITED Logo">
+                <img src="haridra.jpg" alt="Haridra Softtech FashionHub Logo">
                 <div class="logo-text">
-                    <h1>HARIDRA SOFTTECH</h1>
-                    <span>PRIVATE LIMITED</span>
+                    <h1>Haridra Softtech FashionHub</h1>
+                    <span>Trendy Clothing & Accessories</span>
                 </div>
             </div>
             <nav>
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
+                    <li><a href="#categories">Categories</a></li>
                     <li><a href="#products">Products</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#contact">Contact</a></li>
@@ -703,7 +1330,7 @@
     <div class="modal" id="authModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Welcome to Haridra Softtech</h2>
+                <h2>Welcome to Haridra Softech FashionHub</h2>
                 <button class="close-btn" id="closeModal">&times;</button>
             </div>
             <div class="auth-container">
@@ -766,44 +1393,44 @@
 
     <section class="hero" id="home">
         <div class="container">
-            <h2>Innovative IT Solutions & Ecommerce Services</h2>
-            <p>Haridra Softtech Private Limited provides cutting-edge business intelligence, IT consultation, web applications, and API integration services to help your business thrive in the digital age.</p>
-            <a href="#products" class="btn">Explore Our Products</a>
+            <h2>Discover Your Perfect Style</h2>
+            <p>Shop the latest trends in fashion with our exclusive collection of clothing and accessories for men and women. Quality fabrics, perfect fits, and unbeatable prices.</p>
+            <a href="#products" class="btn">Shop Now</a>
         </div>
     </section>
 
-    <section class="services" id="services">
+    <section class="categories" id="categories">
         <div class="container">
             <div class="section-title">
-                <h2>Our Services</h2>
+                <h2>Shop by Category</h2>
             </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Business Intelligence">
-                    <div class="service-content">
-                        <h3>Business Intelligence</h3>
-                        <p>Transform your data into actionable insights with our advanced BI solutions that drive informed decision-making.</p>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Men's Clothing">
+                    <div class="category-content">
+                        <h3>Men's Clothing</h3>
+                        <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
-                <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="IT Consultation">
-                    <div class="service-content">
-                        <h3>IT Consultation</h3>
-                        <p>Expert guidance to align your technology strategy with business objectives for maximum efficiency.</p>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Women's Clothing">
+                    <div class="category-content">
+                        <h3>Women's Clothing</h3>
+                        <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
-                <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Web Applications">
-                    <div class="service-content">
-                        <h3>Web Applications</h3>
-                        <p>Custom web applications designed to streamline your operations and enhance user experience.</p>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Accessories">
+                    <div class="category-content">
+                        <h3>Accessories</h3>
+                        <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
-                <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="API Integration">
-                    <div class="service-content">
-                        <h3>API Integration</h3>
-                        <p>Seamless integration of disparate systems through robust API solutions that enhance functionality.</p>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Footwear">
+                    <div class="category-content">
+                        <h3>Footwear</h3>
+                        <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -813,42 +1440,128 @@
     <section class="products" id="products">
         <div class="container">
             <div class="section-title">
-                <h2>Our Products</h2>
+                <h2>Featured Products</h2>
             </div>
             <div class="products-grid">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Finance Management Suite">
+                    <span class="product-badge">New</span>
+                    <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Men's Casual Shirt">
                     <div class="product-content">
-                        <h3>Finance Management Suite</h3>
-                        <p>Comprehensive financial software for budgeting, accounting, and financial analysis.</p>
-                        <div class="price">5000 rs</div>
+                        <h3>Men's Casual Shirt</h3>
+                        <p>Comfortable cotton shirt perfect for any occasion.</p>
+                        <div class="price">
+                            <span class="original-price">₹1,299</span>
+                            ₹999
+                        </div>
+                        <div class="size-selector">
+                            <span class="size-option">S</span>
+                            <span class="size-option selected">M</span>
+                            <span class="size-option">L</span>
+                            <span class="size-option">XL</span>
+                            <span class="size-option">XXL</span>
+                        </div>
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Ecommerce Platform">
+                    <span class="product-badge">Sale</span>
+                    <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Women's Summer Dress">
                     <div class="product-content">
-                        <h3>Ecommerce Platform</h3>
-                        <p>Feature-rich ecommerce solution with inventory management and payment integration.</p>
-                        <div class="price">5000 rs</div>
+                        <h3>Women's Summer Dress</h3>
+                        <p>Lightweight and breathable for hot summer days.</p>
+                        <div class="price">
+                            <span class="original-price">₹2,499</span>
+                            ₹1,799
+                        </div>
+                        <div class="size-selector">
+                            <span class="size-option">S</span>
+                            <span class="size-option selected">M</span>
+                            <span class="size-option">L</span>
+                            <span class="size-option">XL</span>
+                        </div>
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Business Analytics Tool">
+                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Denim Jeans">
                     <div class="product-content">
-                        <h3>Business Analytics Tool</h3>
-                        <p>Powerful analytics platform with customizable dashboards and reporting.</p>
-                        <div class="price">8000 rs</div>
+                        <h3>Men's Denim Jeans</h3>
+                        <p>Classic fit jeans with premium denim fabric.</p>
+                        <div class="price">₹1,599</div>
+                        <div class="size-selector">
+                            <span class="size-option">28</span>
+                            <span class="size-option">30</span>
+                            <span class="size-option selected">32</span>
+                            <span class="size-option">34</span>
+                        </div>
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="API Gateway">
+                    <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Leather Handbag">
                     <div class="product-content">
-                        <h3>API Gateway</h3>
-                        <p>Secure and scalable API management solution for enterprise applications.</p>
-                        <div class="price">5000 rs</div>
+                        <h3>Women's Leather Handbag</h3>
+                        <p>Elegant and spacious with multiple compartments.</p>
+                        <div class="price">₹3,299</div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Popular</span>
+                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Running Shoes">
+                    <div class="product-content">
+                        <h3>Men's Running Shoes</h3>
+                        <p>Lightweight and cushioned for maximum comfort.</p>
+                        <div class="price">₹2,999</div>
+                        <div class="size-selector">
+                            <span class="size-option">8</span>
+                            <span class="size-option">9</span>
+                            <span class="size-option selected">10</span>
+                            <span class="size-option">11</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Silk Scarf">
+                    <div class="product-content">
+                        <h3>Women's Silk Scarf</h3>
+                        <p>Luxurious 100% silk with elegant patterns.</p>
+                        <div class="price">₹1,199</div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1527719327859-c6ce80353573?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Formal Suit">
+                    <div class="product-content">
+                        <h3>Men's Formal Suit</h3>
+                        <p>Premium wool blend for business occasions.</p>
+                        <div class="price">
+                            <span class="original-price">₹8,999</span>
+                            ₹6,999
+                        </div>
+                        <div class="size-selector">
+                            <span class="size-option">38</span>
+                            <span class="size-option selected">40</span>
+                            <span class="size-option">42</span>
+                            <span class="size-option">44</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">New</span>
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Casual T-Shirt">
+                    <div class="product-content">
+                        <h3>Women's Casual T-Shirt</h3>
+                        <p>Soft cotton with a relaxed fit for everyday wear.</p>
+                        <div class="price">₹699</div>
+                        <div class="size-selector">
+                            <span class="size-option">XS</span>
+                            <span class="size-option selected">S</span>
+                            <span class="size-option">M</span>
+                            <span class="size-option">L</span>
+                        </div>
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
@@ -859,11 +1572,11 @@
     <section class="about" id="about" style="padding: 4rem 0; background-color: var(--light-color);">
         <div class="container">
             <div class="section-title">
-                <h2>About Haridra Softtech</h2>
+                <h2>About Haridra Softtech FashionHub</h2>
             </div>
             <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <p>Haridra Softtech Private Limited is a Telangana-based IT company specializing in business intelligence, IT consultation, web applications, and API integration. Our highly skilled technology workforce delivers innovative solutions tailored to your business needs.</p>
-                <p>We combine technical expertise with business acumen to create products and services that drive efficiency, growth, and competitive advantage for our clients across various industries.</p>
+                <p>FashionHub is your one-stop destination for trendy and affordable fashion. We believe that everyone deserves to look their best without breaking the bank. Our carefully curated collections feature the latest styles at prices that won't hurt your wallet.</p>
+                <p>With a focus on quality, comfort, and style, we bring you clothing and accessories that help you express your unique personality. Our team of fashion experts works tirelessly to ensure our collections are always fresh and on-trend.</p>
             </div>
         </div>
     </section>
@@ -876,7 +1589,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
                 <div>
                     <h3 style="color: var(--primary-color);">Get in Touch</h3>
-                    <p>Have questions about our products or services? Reach out to our team for more information.</p>
+                    <p>Have questions about our products or need assistance with your order? Our customer service team is here to help.</p>
                     <p><strong>Email:</strong> info@haridrasofttech.com</p>
                     <p><strong>Phone:</strong> +91 9949585248</p>
                     <p><strong>Address:</strong> #501, 5th floor, Manjeera Trinity Corporate, Kukatpally - 500072</p>
@@ -906,49 +1619,106 @@
         <div class="container">
             <div class="footer-container">
                 <div class="footer-column">
-                    <h3>Haridra Softtech</h3>
-                    <p>Innovative IT solutions and ecommerce services to help your business thrive in the digital age.</p>
+                    <h3>Haridra Softtech FashionHub</h3>
+                    <p>Your destination for trendy and affordable fashion. Quality clothing and accessories for every style and occasion.</p>
                 </div>
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="#home">Home</a></li>
-                        <li><a href="#services">Services</a></li>
+                        <li><a href="#categories">Categories</a></li>
                         <li><a href="#products">Products</a></li>
                         <li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Services</h3>
+                    <h3>Customer Service</h3>
                     <ul>
-                        <li><a href="#">Business Intelligence</a></li>
-                        <li><a href="#">IT Consultation</a></li>
-                        <li><a href="#">Web Applications</a></li>
-                        <li><a href="#">API Integration</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">FAQs</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Connect With Us</h3>
                     <ul>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">LinkedIn</a></li>
-                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fab fa-pinterest"></i> Pinterest</a></li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 Haridra Softtech Private Limited. All Rights Reserved.</p>
+                <p>&copy; 2025 Haridra Softtech FashionHub. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
         // User accounts storage (persists in localStorage)
-        let users = JSON.parse(localStorage.getItem('haridraUsers')) || [];
+        let users = JSON.parse(localStorage.getItem('fashionhubUsers')) || [];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-        let cart = JSON.parse(localStorage.getItem('haridraCart')) || [];
+        let cart = JSON.parse(localStorage.getItem('fashionhubCart')) || [];
+        let orders = JSON.parse(localStorage.getItem('fashionhubOrders')) || [];
+        let addresses = JSON.parse(localStorage.getItem('fashionhubAddresses')) || [];
+
+        // Sample orders data for demo
+        if (orders.length === 0 && currentUser) {
+            orders = [
+                {
+                    id: 'ORD-' + Date.now().toString().slice(-6),
+                    date: new Date().toISOString().split('T')[0],
+                    items: [
+                        { name: "Men's Casual Shirt", price: 999, quantity: 1, size: "M" }
+                    ],
+                    total: 999,
+                    status: 'completed',
+                    userId: currentUser.id
+                },
+                {
+                    id: 'ORD-' + (Date.now() - 1000000).toString().slice(-6),
+                    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+                    items: [
+                        { name: "Women's Summer Dress", price: 1799, quantity: 1, size: "M" },
+                        { name: "Women's Silk Scarf", price: 1199, quantity: 2 }
+                    ],
+                    total: 4197,
+                    status: 'pending',
+                    userId: currentUser.id
+                }
+            ];
+            localStorage.setItem('fashionhubOrders', JSON.stringify(orders));
+        }
+
+        // Sample address data for demo
+        if (addresses.length === 0 && currentUser) {
+            addresses = [
+                {
+                    id: '1',
+                    type: 'home',
+                    street: '123 Main Street',
+                    city: 'Mumbai',
+                    state: 'Maharashtra',
+                    zip: '400001',
+                    country: 'India',
+                    isDefault: true
+                },
+                {
+                    id: '2',
+                    type: 'work',
+                    street: '456 Business Avenue',
+                    city: 'Mumbai',
+                    state: 'Maharashtra',
+                    zip: '400002',
+                    country: 'India',
+                    isDefault: false
+                }
+            ];
+            localStorage.setItem('fashionhubAddresses', JSON.stringify(addresses));
+        }
 
         // DOM elements
         const modal = document.getElementById('authModal');
@@ -966,17 +1736,42 @@
         const cartTotal = document.getElementById('cartTotal');
         const checkoutBtn = document.getElementById('checkoutBtn');
         const cartCount = document.getElementById('cartCount');
+        const profileSidebar = document.getElementById('profileSidebar');
+        const closeProfile = document.getElementById('closeProfile');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        const ordersCount = document.getElementById('ordersCount');
+        const cartItemsCount = document.getElementById('cartItemsCount');
+        const orderHistory = document.getElementById('orderHistory');
+        const fullOrderHistory = document.getElementById('fullOrderHistory');
+        const addressList = document.getElementById('addressList');
+        const addAddressBtn = document.getElementById('addAddressBtn');
+        const profileName = document.getElementById('profileName');
+        const profileEmail = document.getElementById('profileEmail');
+        const profilePhone = document.getElementById('profilePhone');
+        const profileDob = document.getElementById('profileDob');
+        const profileForm = document.getElementById('profileForm');
+        const settingsForm = document.getElementById('settingsForm');
 
         // Update UI based on login state
         function updateAuthUI() {
             if (currentUser) {
                 authNavItem.innerHTML = `
                     <div class="user-profile">
-                        <span>Welcome, ${currentUser.name.split(' ')[0]}</span>
-                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                        <span>${currentUser.name.split(' ')[0]}</span>
+                        <div class="profile-dropdown">
+                            <a href="#" id="profileLink">My Profile</a>
+                            <div class="divider"></div>
+                            <button class="logout-btn" id="logoutBtn">Logout</button>
+                        </div>
                     </div>
                 `;
                 document.getElementById('logoutBtn').addEventListener('click', logout);
+                document.getElementById('profileLink').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openProfileSidebar();
+                });
             } else {
                 authNavItem.innerHTML = '<button class="login-btn" id="loginBtn">Login</button>';
                 document.getElementById('loginBtn').addEventListener('click', () => {
@@ -990,7 +1785,8 @@
         function updateCartCount() {
             const count = cart.reduce((total, item) => total + item.quantity, 0);
             cartCount.textContent = count;
-            localStorage.setItem('haridraCart', JSON.stringify(cart));
+            cartItemsCount.textContent = count;
+            localStorage.setItem('fashionhubCart', JSON.stringify(cart));
         }
 
         // Function to show cart notification
@@ -1006,7 +1802,7 @@
         function renderCartItems() {
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-                cartTotal.textContent = 'Total: 0 rs';
+                cartTotal.textContent = 'Total: ₹0';
                 return;
             }
 
@@ -1022,7 +1818,8 @@
                     <img src="${item.image}" alt="${item.name}">
                     <div class="cart-item-details">
                         <div class="cart-item-title">${item.name}</div>
-                        <div class="cart-item-price">${item.price} rs</div>
+                        ${item.size ? `<div class="cart-item-size">Size: ${item.size}</div>` : ''}
+                        <div class="cart-item-price">₹${item.price}</div>
                         <div class="cart-item-quantity">
                             <button class="quantity-btn minus" data-index="${index}">-</button>
                             <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-index="${index}">
@@ -1034,7 +1831,7 @@
                 cartItemsContainer.appendChild(cartItem);
             });
 
-            cartTotal.textContent = `Total: ${total} rs`;
+            cartTotal.textContent = `Total: ₹${total}`;
 
             // Add event listeners to quantity buttons
             document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
@@ -1057,243 +1854,499 @@
                 });
             });
 
-document.querySelectorAll('.quantity-input').forEach(input => {
-    input.addEventListener('change', (e) => {
-        const index = e.target.getAttribute('data-index');
-        const newQuantity = parseInt(e.target.value);
-        if (newQuantity > 0) {
-            cart[index].quantity = newQuantity;
-            renderCartItems();
-            updateCartCount();
-        } else {
-            e.target.value = cart[index].quantity;
-        }
-    });
-});
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    const newQuantity = parseInt(e.target.value);
+                    if (newQuantity > 0) {
+                        cart[index].quantity = newQuantity;
+                        renderCartItems();
+                        updateCartCount();
+                    } else {
+                        e.target.value = cart[index].quantity;
+                    }
+                });
+            });
 
-document.querySelectorAll('.remove-item').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        const index = e.target.getAttribute('data-index');
-        cart.splice(index, 1);
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    cart.splice(index, 1);
+                    renderCartItems();
+                    updateCartCount();
+                });
+            });
+        }
+
+        // Open profile sidebar
+        function openProfileSidebar() {
+            profileSidebar.classList.add('open');
+            document.body.classList.add('profile-open');
+            updateProfileInfo();
+            renderOrderHistory();
+            renderFullOrderHistory();
+            renderAddressList();
+        }
+
+        // Close profile sidebar
+        function closeProfileSidebar() {
+            profileSidebar.classList.remove('open');
+            document.body.classList.remove('profile-open');
+        }
+
+        // Update profile information
+        function updateProfileInfo() {
+            if (currentUser) {
+                // Generate avatar based on name if not exists
+                if (!currentUser.avatar) {
+                    currentUser.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=e74c3c&color=fff`;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                }
+                
+                userAvatar.src = currentUser.avatar;
+                userName.textContent = currentUser.name;
+                userEmail.textContent = currentUser.email;
+                ordersCount.textContent = orders.filter(order => order.userId === currentUser.id).length;
+                
+                // Update profile form
+                if (profileName) profileName.value = currentUser.name;
+                if (profileEmail) profileEmail.value = currentUser.email;
+                if (profilePhone) profilePhone.value = currentUser.phone || '';
+                if (profileDob) profileDob.value = currentUser.dob || '';
+            }
+        }
+
+        // Render order history
+        function renderOrderHistory() {
+            orderHistory.innerHTML = '';
+            const userOrders = orders.filter(order => order.userId === currentUser.id).slice(0, 3);
+            
+            if (userOrders.length === 0) {
+                orderHistory.innerHTML = '<tr><td colspan="4" style="text-align: center;">No orders found</td></tr>';
+                return;
+            }
+            
+            userOrders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.date}</td>
+                    <td>₹${order.total}</td>
+                    <td><span class="order-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
+                `;
+                orderHistory.appendChild(row);
+            });
+        }
+
+        // Render full order history
+        function renderFullOrderHistory() {
+            fullOrderHistory.innerHTML = '';
+            const userOrders = orders.filter(order => order.userId === currentUser.id);
+            
+            if (userOrders.length === 0) {
+                fullOrderHistory.innerHTML = '<tr><td colspan="6" style="text-align: center;">No orders found</td></tr>';
+                return;
+            }
+            
+            userOrders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.date}</td>
+                    <td>${order.items.length}</td>
+                    <td>₹${order.total}</td>
+                    <td><span class="order-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
+                    <td><a href="#" class="view-order">View</a></td>
+                `;
+                fullOrderHistory.appendChild(row);
+            });
+        }
+
+        // Render address list
+        function renderAddressList() {
+            addressList.innerHTML = '';
+            
+            if (addresses.length === 0) {
+                addressList.innerHTML = '<p>No addresses saved yet.</p>';
+                return;
+            }
+            
+            addresses.forEach(address => {
+                const addressCard = document.createElement('div');
+                addressCard.className = 'address-card';
+                addressCard.style.border = '1px solid #eee';
+                addressCard.style.borderRadius = '8px';
+                addressCard.style.padding = '1rem';
+                addressCard.style.marginBottom = '1rem';
+                addressCard.style.position = 'relative';
+                
+                let addressHtml = `
+                    <h4 style="margin-top: 0; color: var(--primary-color);">${address.type.charAt(0).toUpperCase() + address.type.slice(1)} Address</h4>
+                    <p>${address.street}</p>
+                    <p>${address.city}, ${address.state} ${address.zip}</p>
+                    <p>${address.country}</p>
+                `;
+                
+                if (address.isDefault) {
+                    addressHtml += '<span style="position: absolute; top: 1rem; right: 1rem; background-color: var(--success-color); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Default</span>';
+                }
+                
+                addressHtml += `
+                    <div style="margin-top: 1rem;">
+                        <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.9rem; margin-right: 0.5rem;">Edit</button>
+                        <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.9rem;">Delete</button>
+                    </div>
+                `;
+                
+                addressCard.innerHTML = addressHtml;
+                addressList.appendChild(addressCard);
+            });
+        }
+
+        // Login function
+        function login(email, password) {
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateAuthUI();
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                return true;
+            }
+            return false;
+        }
+
+        // Register function
+        function register(name, email, password) {
+            // Check if user already exists
+            if (users.some(u => u.email === email)) {
+                return false;
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                name,
+                email,
+                password,
+                phone: '',
+                dob: ''
+            };
+
+            users.push(newUser);
+            localStorage.setItem('fashionhubUsers', JSON.stringify(users));
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateAuthUI();
+            return true;
+        }
+
+        // Logout function
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateAuthUI();
+            closeProfileSidebar();
+        }
+
+        // Validate password match
+        function validatePasswordMatch(password, confirmPassword) {
+            return password === confirmPassword;
+        }
+
+        // Event listeners
+        loginBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        showRegister.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        });
+
+        showLogin.addEventListener('click', () => {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+
+        // Login form submission
+        document.getElementById('login').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (login(email, password)) {
+                // Success
+                document.getElementById('loginEmailError').style.display = 'none';
+                document.getElementById('loginPasswordError').style.display = 'none';
+            } else {
+                // Error
+                document.getElementById('loginEmailError').textContent = 'Invalid email or password';
+                document.getElementById('loginEmailError').style.display = 'block';
+                document.getElementById('loginPasswordError').style.display = 'none';
+            }
+        });
+
+        // Register form submission
+        document.getElementById('register').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            // Reset errors
+            document.getElementById('regNameError').style.display = 'none';
+            document.getElementById('regEmailError').style.display = 'none';
+            document.getElementById('regPasswordError').style.display = 'none';
+            document.getElementById('regConfirmPasswordError').style.display = 'none';
+
+            // Validate
+            let isValid = true;
+
+            if (name.length < 3) {
+                document.getElementById('regNameError').textContent = 'Name must be at least 3 characters';
+                document.getElementById('regNameError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!email.includes('@')) {
+                document.getElementById('regEmailError').textContent = 'Please enter a valid email';
+                document.getElementById('regEmailError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (password.length < 6) {
+                document.getElementById('regPasswordError').textContent = 'Password must be at least 6 characters';
+                document.getElementById('regPasswordError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!validatePasswordMatch(password, confirmPassword)) {
+                document.getElementById('regConfirmPasswordError').textContent = 'Passwords do not match';
+                document.getElementById('regConfirmPasswordError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                if (register(name, email, password)) {
+                    // Success
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                } else {
+                    document.getElementById('regEmailError').textContent = 'Email already registered';
+                    document.getElementById('regEmailError').style.display = 'block';
+                }
+            }
+        });
+
+        // Cart functionality
+        cartLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            cartSidebar.classList.add('open');
+            document.body.classList.add('cart-open');
+        });
+
+        closeCart.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+            document.body.classList.remove('cart-open');
+        });
+
+        closeProfile.addEventListener('click', () => {
+            closeProfileSidebar();
+        });
+
+        // Close cart when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Add to cart buttons
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (!currentUser) {
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                    return;
+                }
+                
+                const productCard = e.target.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = parseInt(productCard.querySelector('.price').textContent.replace('₹', ''));
+                const productImage = productCard.querySelector('img').src;
+                
+                // Get selected size if available
+                let selectedSize = null;
+                const sizeSelector = productCard.querySelector('.size-selector');
+                if (sizeSelector) {
+                    const selectedSizeOption = sizeSelector.querySelector('.size-option.selected');
+                    if (selectedSizeOption) {
+                        selectedSize = selectedSizeOption.textContent;
+                    }
+                }
+                
+                // Check if product already in cart
+                const existingItemIndex = cart.findIndex(item => 
+                    item.name === productName && 
+                    (!item.size || item.size === selectedSize)
+                );
+                
+                if (existingItemIndex !== -1) {
+                    cart[existingItemIndex].quantity++;
+                } else {
+                    cart.push({
+                        name: productName,
+                        price: productPrice,
+                        image: productImage,
+                        quantity: 1,
+                        size: selectedSize
+                    });
+                }
+                
+                renderCartItems();
+                updateCartCount();
+                showCartNotification();
+            });
+        });
+
+        // Size selector functionality
+        document.querySelectorAll('.size-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                const parent = e.target.closest('.size-selector');
+                parent.querySelectorAll('.size-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                e.target.classList.add('selected');
+            });
+        });
+
+        // Checkout button
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) return;
+
+            if (confirm('Proceed to checkout?')) {
+                // Create new order
+                const newOrder = {
+                    id: 'ORD-' + Date.now().toString().slice(-6),
+                    date: new Date().toISOString().split('T')[0],
+                    items: [...cart],
+                    total: cart.reduce((total, item) => total + (item.price * item.quantity), 0),
+                    status: 'pending',
+                    userId: currentUser.id
+                };
+                
+                orders.push(newOrder);
+                localStorage.setItem('fashionhubOrders', JSON.stringify(orders));
+                
+                alert('Thank you for your purchase! Your order ID is: ' + newOrder.id);
+                cart = [];
+                localStorage.setItem('fashionhubCart', JSON.stringify(cart));
+                renderCartItems();
+                updateCartCount();
+                cartSidebar.classList.remove('open');
+                document.body.classList.remove('cart-open');
+                
+                // Update order history if profile is open
+                if (profileSidebar.classList.contains('open')) {
+                    renderOrderHistory();
+                    renderFullOrderHistory();
+                }
+            }
+        });
+
+        // Profile menu navigation
+        document.querySelectorAll('.profile-menu a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.profile-menu a').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                e.target.classList.add('active');
+                
+                // Hide all sections
+                document.querySelectorAll('.dashboard-content').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show selected section
+                const sectionId = e.target.getAttribute('data-section') + 'Section';
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Profile form submission
+        if (profileForm) {
+            profileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Update user info
+                currentUser.name = profileName.value;
+                currentUser.email = profileEmail.value;
+                currentUser.phone = profilePhone.value;
+                currentUser.dob = profileDob.value;
+                
+                // Update in users array
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('fashionhubUsers', JSON.stringify(users));
+                }
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Update UI
+                updateProfileInfo();
+                
+                alert('Profile updated successfully!');
+            });
+        }
+
+        // Settings form submission
+        if (settingsForm) {
+            settingsForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Settings updated successfully!');
+            });
+        }
+
+        // Add address button
+        if (addAddressBtn) {
+            addAddressBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const newAddress = {
+                    id: Date.now().toString(),
+                    type: 'other',
+                    street: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    country: 'India',
+                    isDefault: addresses.length === 0
+                };
+                
+                addresses.push(newAddress);
+                localStorage.setItem('fashionhubAddresses', JSON.stringify(addresses));
+                renderAddressList();
+            });
+        }
+
+        // Initialize
+        updateAuthUI();
         renderCartItems();
         updateCartCount();
-    });
-});
-}
-
-// Login function
-function login(email, password) {
-const user = users.find(u => u.email === email && u.password === password);
-if (user) {
-    currentUser = user;
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    updateAuthUI();
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-    return true;
-}
-return false;
-}
-
-// Register function
-function register(name, email, password) {
-// Check if user already exists
-if (users.some(u => u.email === email)) {
-    return false;
-}
-
-const newUser = {
-    id: Date.now().toString(),
-    name,
-    email,
-    password
-};
-
-users.push(newUser);
-localStorage.setItem('haridraUsers', JSON.stringify(users));
-currentUser = newUser;
-localStorage.setItem('currentUser', JSON.stringify(currentUser));
-updateAuthUI();
-return true;
-}
-
-// Logout function
-function logout() {
-currentUser = null;
-localStorage.removeItem('currentUser');
-updateAuthUI();
-}
-
-// Validate password match
-function validatePasswordMatch(password, confirmPassword) {
-return password === confirmPassword;
-}
-
-// Event listeners
-loginBtn.addEventListener('click', () => {
-modal.style.display = 'flex';
-document.body.style.overflow = 'hidden';
-});
-
-closeModal.addEventListener('click', () => {
-modal.style.display = 'none';
-document.body.style.overflow = 'auto';
-});
-
-showRegister.addEventListener('click', () => {
-loginForm.style.display = 'none';
-registerForm.style.display = 'block';
-});
-
-showLogin.addEventListener('click', () => {
-registerForm.style.display = 'none';
-loginForm.style.display = 'block';
-});
-
-// Login form submission
-document.getElementById('login').addEventListener('submit', (e) => {
-e.preventDefault();
-const email = document.getElementById('loginEmail').value;
-const password = document.getElementById('loginPassword').value;
-
-if (login(email, password)) {
-    // Success
-    document.getElementById('loginEmailError').style.display = 'none';
-    document.getElementById('loginPasswordError').style.display = 'none';
-} else {
-    // Error
-    document.getElementById('loginEmailError').textContent = 'Invalid email or password';
-    document.getElementById('loginEmailError').style.display = 'block';
-    document.getElementById('loginPasswordError').style.display = 'none';
-}
-});
-
-// Register form submission
-document.getElementById('register').addEventListener('submit', (e) => {
-e.preventDefault();
-const name = document.getElementById('regName').value;
-const email = document.getElementById('regEmail').value;
-const password = document.getElementById('regPassword').value;
-const confirmPassword = document.getElementById('regConfirmPassword').value;
-
-// Reset errors
-document.getElementById('regNameError').style.display = 'none';
-document.getElementById('regEmailError').style.display = 'none';
-document.getElementById('regPasswordError').style.display = 'none';
-document.getElementById('regConfirmPasswordError').style.display = 'none';
-
-// Validate
-let isValid = true;
-
-if (name.length < 3) {
-    document.getElementById('regNameError').textContent = 'Name must be at least 3 characters';
-    document.getElementById('regNameError').style.display = 'block';
-    isValid = false;
-}
-
-if (!email.includes('@')) {
-    document.getElementById('regEmailError').textContent = 'Please enter a valid email';
-    document.getElementById('regEmailError').style.display = 'block';
-    isValid = false;
-}
-
-if (password.length < 6) {
-    document.getElementById('regPasswordError').textContent = 'Password must be at least 6 characters';
-    document.getElementById('regPasswordError').style.display = 'block';
-    isValid = false;
-}
-
-if (!validatePasswordMatch(password, confirmPassword)) {
-    document.getElementById('regConfirmPasswordError').textContent = 'Passwords do not match';
-    document.getElementById('regConfirmPasswordError').style.display = 'block';
-    isValid = false;
-}
-
-if (isValid) {
-    if (register(name, email, password)) {
-        // Success
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    } else {
-        document.getElementById('regEmailError').textContent = 'Email already registered';
-        document.getElementById('regEmailError').style.display = 'block';
-    }
-}
-});
-
-// Cart functionality
-cartLink.addEventListener('click', (e) => {
-e.preventDefault();
-cartSidebar.classList.add('open');
-document.body.classList.add('cart-open');
-});
-
-closeCart.addEventListener('click', () => {
-cartSidebar.classList.remove('open');
-document.body.classList.remove('cart-open');
-});
-
-// Close cart when clicking outside
-modal.addEventListener('click', (e) => {
-if (e.target === modal) {
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-});
-
-// Add to cart buttons
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-btn.addEventListener('click', (e) => {
-    if (!currentUser) {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        return;
-    }
-    
-    const productCard = e.target.closest('.product-card');
-    const productName = productCard.querySelector('h3').textContent;
-    const productPrice = parseInt(productCard.querySelector('.price').textContent);
-    const productImage = productCard.querySelector('img').src;
-    
-    // Check if product already in cart
-    const existingItem = cart.find(item => item.name === productName);
-    
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push({
-            name: productName,
-            price: productPrice,
-            image: productImage,
-            quantity: 1
-        });
-    }
-    
-    renderCartItems();
-    updateCartCount();
-    showCartNotification();
-});
-});
-
-// Checkout button
-checkoutBtn.addEventListener('click', () => {
-if (cart.length === 0) return;
-
-if (confirm('Proceed to checkout?')) {
-    alert('Thank you for your purchase!');
-    cart = [];
-    localStorage.setItem('haridraCart', JSON.stringify(cart));
-    renderCartItems();
-    updateCartCount();
-    cartSidebar.classList.remove('open');
-    document.body.classList.remove('cart-open');
-}
-});
-
-// Initialize
-updateAuthUI();
-renderCartItems();
-updateCartCount();
-</script>
+    </script>
 </body>
 </html>
