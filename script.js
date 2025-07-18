@@ -210,7 +210,11 @@ function renderCartItems() {
             <div class="cart-item-details">
                 <div class="cart-item-title">${item.name}</div>
                 ${item.size ? `<div class="cart-item-size">Size: ${item.size}</div>` : ''}
-                <div class="cart-item-price">₹${item.price}</div>
+                <div class="cart-item-price">
+  ${item.originalPrice ? `<span class="original-price">₹${item.originalPrice}</span>` : ''}
+  ₹${item.price}
+</div>
+
                 <div class="cart-item-quantity">
                     <button class="quantity-btn minus" data-index="${index}">-</button>
                     <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-index="${index}">
