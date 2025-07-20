@@ -1,4 +1,4 @@
-  :root {
+:root {
     --primary-color: #2c3e50;
     --secondary-color: #e74c3c;
     --accent-color: #3498db;
@@ -19,21 +19,27 @@ body {
 }
 
 body.cart-open, body.profile-open {
-    overflow: hidden; /* Changed from overflow-x to overflow */
-    position: fixed; /* Prevents body scrolling while sidebar is open */
+    overflow: hidden;
+    position: fixed;
     width: 100%;
+    height: 100%;
 }
 
 body.cart-open {
-    margin-right: 350px;
+    right: 350px;
 }
 
 body.profile-open {
-    margin-left: 350px;
+    left: 350px;
 }
-/* Make the sidebars scrollable */
-.cart-sidebar, .profile-sidebar {
-    overflow-y: auto;
+
+/* Make sure to reset these when sidebars are closed */
+body:not(.cart-open):not(.profile-open) {
+    overflow: auto;
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
 }
 
 header {
@@ -1420,4 +1426,27 @@ body.dark-mode {
         text-align: left;
         margin-top: 0.3rem;
     }
+}
+/* Address Selection in Checkout */
+.address-card.selected {
+    border-color: var(--secondary-color);
+    background-color: rgba(231, 76, 60, 0.05);
+}
+
+.address-card:hover {
+    border-color: var(--secondary-color);
+}
+
+.address-card input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+/* Search Highlight */
+.product-card.highlight {
+    animation: highlight 2s;
+}
+
+@keyframes highlight {
+    0% { box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.5); }
+    100% { box-shadow: none; }
 }
