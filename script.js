@@ -1,4 +1,4 @@
-
+-
 // Functions for login, registration, cart, etc.
 function showDashboardSection() {
     document.querySelectorAll('.dashboard-content').forEach(section => {
@@ -1512,3 +1512,282 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// Simple FAQ-based AI chatbot logic
+const chatbotBtn = document.getElementById('toggleChatbot');
+const chatbot = document.getElementById('chatbot');
+const closeChatbot = document.getElementById('closeChatbot');
+const chatbotInput = document.getElementById('chatbotInput');
+const sendChatbotMessage = document.getElementById('sendChatbotMessage');
+const chatbotMessages = document.getElementById('chatbotMessages');
+
+chatbotBtn.addEventListener('click', () => {
+    chatbot.style.display = 'flex';
+});
+
+closeChatbot.addEventListener('click', () => {
+    chatbot.style.display = 'none';
+});
+
+sendChatbotMessage.addEventListener('click', handleChat);
+chatbotInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleChat();
+});
+
+function handleChat() {
+    const message = chatbotInput.value.trim();
+    if (!message) return;
+
+    appendMessage('You', message);
+    chatbotInput.value = '';
+    
+    const response = getBotResponse(message.toLowerCase());
+    setTimeout(() => appendMessage('Bot', response), 500);
+}
+
+function appendMessage(sender, text) {
+    const msg = document.createElement('div');
+    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chatbotMessages.appendChild(msg);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function getBotResponse(input) {
+    if (input.includes('return')) return "You can return items within 7 days of delivery.";
+    if (input.includes('order') || input.includes('status')) return "You can view your order status in the 'My Orders' section of your profile.";
+    if (input.includes('shipping')) return "We offer free shipping on orders over ₹999!";
+    if (input.includes('contact')) return "You can reach us at support@haridrafashionhub.com.";
+    if (input.includes('cancel')) return "Orders can be cancelled from the 'My Orders' section before they are shipped.";
+    return "I'm here to help! Try asking about returns, shipping, or how to track your order.";
+}
+// Update the getBotResponse function with more comprehensive responses
+function getBotResponse(input) {
+    input = input.toLowerCase();
+    
+    // Greetings
+    if (input.includes('hi') || input.includes('hello') || input.includes('hey')) {
+        return "Hello! Welcome to Haridra Softtech FashionHub. How can I help you today?";
+    }
+    
+    // Common e-commerce questions
+    if (input.includes('return') || input.includes('exchange')) {
+        return "You can return or exchange items within 7 days of delivery. Items must be unused with original tags. Visit our Returns page for more details.";
+    }
+    
+    if (input.includes('order') || input.includes('status') || input.includes('track')) {
+        return "You can check your order status in the 'My Orders' section of your profile. Need help with a specific order? Please provide your order number.";
+    }
+    
+    if (input.includes('shipping') || input.includes('delivery')) {
+        return "We offer: \n- Free shipping on orders over ₹999\n- Standard delivery: 3-5 business days\n- Express delivery: 1-2 business days (additional ₹150)";
+    }
+    
+    if (input.includes('contact') || input.includes('help') || input.includes('support')) {
+        return "You can reach our customer support:\n📧 Email: support@haridrasofttech.com\n📞 Phone: +91 9949585248\n🕒 Hours: 9AM-6PM, Mon-Sat";
+    }
+    
+    if (input.includes('cancel') || input.includes('change order')) {
+        return "Orders can be cancelled from the 'My Orders' section before they are shipped. For changes to shipped orders, please contact our support team.";
+    }
+    
+    if (input.includes('payment') || input.includes('pay')) {
+        return "We accept:\n💳 Credit/Debit Cards\n📱 UPI Payments\n💰 Net Banking\n💸 Cash on Delivery (COD)\nAll payments are secure with Razorpay.";
+    }
+    
+    if (input.includes('size') || input.includes('fit')) {
+        return "You can find size guides on each product page. If you need help choosing the right size, let me know which product you're interested in!";
+    }
+    
+    if (input.includes('discount') || input.includes('coupon') || input.includes('offer')) {
+        return "Current offers:\n🎉 NEWUSER20 - 20% off first order\n🛍️ FASHION25 - 25% off orders over ₹2000\nCheck our homepage for seasonal offers!";
+    }
+    
+    if (input.includes('product') || input.includes('item')) {
+        return "We have a wide range of fashion products. Could you be more specific? For example:\n- Men's shirts\n- Women's dresses\n- Accessories\n- Footwear";
+    }
+    
+    if (input.includes('thank') || input.includes('thanks')) {
+        return "You're welcome! 😊 Is there anything else I can help you with?";
+    }
+    
+    if (input.includes('bye') || input.includes('goodbye')) {
+        return "Thank you for visiting Haridra Softtech FashionHub! Have a great day! 👋";
+    }
+    
+    // Default response
+    return "I'm here to help with:\n- Order status\n- Returns & exchanges\n- Product info\n- Payment options\n- Size guides\nWhat would you like to know?";
+}
+
+// Update the appendMessage function to style messages better
+function appendMessage(sender, text) {
+    const msg = document.createElement('div');
+    msg.className = `chat-msg ${sender.toLowerCase()}-msg`;
+    msg.innerHTML = `
+        <div class="msg-sender">${sender}</div>
+        <div class="msg-text">${text.replace(/\n/g, '<br>')}</div>
+    `;
+    chatbotMessages.appendChild(msg);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+// Add welcome message when chatbot opens
+chatbotBtn.addEventListener('click', () => {
+    chatbot.style.display = 'flex';
+    // Only show welcome message if chat is empty
+    if (chatbotMessages.children.length === 0) {
+        appendMessage('Bot', getBotResponse('hello'));
+    }
+});
+
+// Add these styles to your CSS (style.css)
+/*
+.chat-msg {
+    margin-bottom: 15px;
+    max-width: 80%;
+}
+
+.bot-msg {
+    align-self: flex-start;
+    background-color: #f0f0f0;
+    border-radius: 15px 15px 15px 0;
+    padding: 10px 15px;
+}
+
+.user-msg {
+    align-self: flex-end;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 15px 15px 0 15px;
+    padding: 10px 15px;
+}
+
+.msg-sender {
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.msg-text {
+    line-height: 1.4;
+}
+*/
+
+// Add typing indicator before bot responds
+function handleChat() {
+    const message = chatbotInput.value.trim();
+    if (!message) return;
+
+    appendMessage('You', message);
+    chatbotInput.value = '';
+    
+    // Show typing indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'chat-msg bot-msg typing-indicator';
+    typingIndicator.innerHTML = '<div class="msg-text">...</div>';
+    chatbotMessages.appendChild(typingIndicator);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    
+    setTimeout(() => {
+        // Remove typing indicator
+        if (typingIndicator.parentNode) {
+            typingIndicator.remove();
+        }
+        
+        const response = getBotResponse(message);
+        appendMessage('Bot', response);
+    }, 1000 + (Math.random() * 1000)); // Random delay for more natural feel
+}
+// Update the chatbot toggle event listener
+chatbotBtn.addEventListener('click', () => {
+    chatbot.style.display = 'flex';
+    // Clear previous messages
+    chatbotMessages.innerHTML = '';
+    
+    // Add welcome message
+    appendMessage('Bot', "Hello! Welcome to Haridra Softtech FashionHub. How can I help you today? Here are some common questions:");
+    
+    // Add quick options
+    const quickOptions = [
+        'Order status and tracking',
+        'Returns and exchanges',
+        'Shipping information',
+        'Payment options',
+        'Size guides',
+        'Current discounts and offers',
+        'Product inquiries',
+        'Contact information'
+    ];
+    
+    const optionsContainer = document.createElement('div');
+    optionsContainer.className = 'quick-options';
+    
+    quickOptions.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'quick-option-btn';
+        btn.textContent = option;
+        btn.addEventListener('click', () => {
+            // Remove all quick options
+            document.querySelectorAll('.quick-option-btn').forEach(b => b.remove());
+            // Handle the selected option
+            handleQuickOption(option);
+        });
+        optionsContainer.appendChild(btn);
+    });
+    
+    // Create a message container for the options
+    const optionsMessage = document.createElement('div');
+    optionsMessage.className = 'chat-msg bot-msg';
+    optionsMessage.appendChild(optionsContainer);
+    chatbotMessages.appendChild(optionsMessage);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+});
+
+// Function to handle quick option selection
+function handleQuickOption(option) {
+    // Show typing indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'chat-msg bot-msg typing-indicator';
+    typingIndicator.innerHTML = '<div class="msg-text">...</div>';
+    chatbotMessages.appendChild(typingIndicator);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    
+    setTimeout(() => {
+        // Remove typing indicator
+        if (typingIndicator.parentNode) {
+            typingIndicator.remove();
+        }
+        
+        // Get response based on selected option
+        let response = "";
+        switch(option) {
+            case 'Order status and tracking':
+                response = "You can check your order status in the 'My Orders' section of your profile. Need help with a specific order? Please provide your order number.";
+                break;
+            case 'Returns and exchanges':
+                response = "You can return or exchange items within 7 days of delivery. Items must be unused with original tags. Visit our Returns page for more details.";
+                break;
+            case 'Shipping information':
+                response = "We offer: \n- Free shipping on orders over ₹999\n- Standard delivery: 3-5 business days\n- Express delivery: 1-2 business days (additional ₹150)";
+                break;
+            case 'Payment options':
+                response = "We accept:\n💳 Credit/Debit Cards\n📱 UPI Payments\n💰 Net Banking\n💸 Cash on Delivery (COD)\nAll payments are secure with Razorpay.";
+                break;
+            case 'Size guides':
+                response = "You can find size guides on each product page. If you need help choosing the right size, let me know which product you're interested in!";
+                break;
+            case 'Current discounts and offers':
+                response = "Current offers:\n🎉 NEWUSER20 - 20% off first order\n🛍️ FASHION25 - 25% off orders over ₹2000\nCheck our homepage for seasonal offers!";
+                break;
+            case 'Product inquiries':
+                response = "We have a wide range of fashion products. Could you be more specific? For example:\n- Men's shirts\n- Women's dresses\n- Accessories\n- Footwear";
+                break;
+            case 'Contact information':
+                response = "You can reach our customer support:\n📧 Email: support@haridrasofttech.com\n📞 Phone: +91 9949585248\n🕒 Hours: 9AM-6PM, Mon-Sat";
+                break;
+            default:
+                response = "I'm here to help! What else would you like to know?";
+        }
+        
+        appendMessage('Bot', response);
+    }, 1000);
+}
