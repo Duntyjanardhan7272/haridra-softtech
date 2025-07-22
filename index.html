@@ -67,6 +67,7 @@
                 <li><a href="#" data-section="profile"><i class="fas fa-user"></i> Profile</a></li>
                 <li><a href="#" data-section="address"><i class="fas fa-map-marker-alt"></i> Address</a></li>
                 <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#" data-section="analytics"><i class="fas fa-chart-line"></i> Analytics</a></li>
             </ul>
         </div>
     </div>
@@ -214,7 +215,36 @@
             <button type="submit" class="save-btn">Update Settings</button>
             <div id="settingsSuccessMsg" class="success-msg" style="display: none;"></div>
         </form>
+    </div> 
+        <!-- Add this to your dashboard section -->
+<div class="dashboard-content" id="analyticsSection">
+    <div style="margin-bottom: 1rem;">
+        <button class="btn btn-secondary" onclick="showDashboardSection()">Back to Dashboard</button>
     </div>
+    <h2 class="dashboard-section-title">Site Analytics</h2>
+    
+    <div class="analytics-cards">
+        <div class="analytics-card">
+            <h3>Total Visits</h3>
+            <div class="analytics-value" id="totalVisits">0</div>
+        </div>
+        <div class="analytics-card">
+            <h3>Current Page Views</h3>
+            <div class="analytics-value" id="currentPageViews">0</div>
+        </div>
+        <div class="analytics-card">
+            <h3>Last Visit</h3>
+            <div class="analytics-value" id="lastVisit">Never</div>
+        </div>
+    </div>
+    
+    <h3 style="margin-top: 2rem;">Page Popularity</h3>
+    <div id="pagePopularityChart">
+        <canvas id="analyticsChart" width="400" height="200"></canvas>
+        <!-- Chart will be rendered here -->
+    </div>
+</div>
+   
 
     <header>
         <div class="container header-container">
@@ -335,7 +365,7 @@
             </div>
             <div class="categories-grid">
                 <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Men's Clothing">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Men's Clothing">
                     <div class="category-content">
                         <h3>Men's Clothing</h3>
                         <a href="#" class="btn btn-secondary">Shop Now</a>
@@ -349,198 +379,98 @@
                     </div>
                 </div>
                 <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Accessories">
+                    <img src="https://images.unsplash.com/photo-1534215754734-18e55d13e346?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Accessories">
                     <div class="category-content">
                         <h3>Accessories</h3>
                         <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
                 <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Footwear">
+                    <img src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Footwear">
                     <div class="category-content">
                         <h3>Footwear</h3>
                         <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
-            </div>
+            </div>        
         </div>
     </section>
-
-    <section class="products" id="products">
+      <!-- Products Section -->
+      <section class="products" id="products">
         <div class="container">
             <div class="section-title">
                 <h2>Featured Products</h2>
             </div>
-            <div class="products-grid">
-                <div class="product-card">
-                    <span class="product-badge">New</span>
-                    <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Men's Casual Shirt">
-                    <div class="product-content">
-                        <h3>Men's Casual Shirt</h3>
-                        <p>Comfortable cotton shirt perfect for any occasion.</p>
-                        <div class="price">
-                            
-                        <div class="cart-item-price">₹999</div>
-                        </div>
-                        <div class="size-selector">
-                            <span class="size-option">S</span>
-                            <span class="size-option selected">M</span>
-                            <span class="size-option">L</span>
-                            <span class="size-option">XL</span>
-                            <span class="size-option">XXL</span>
-                        </div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <span class="product-badge">Sale</span>
-                    <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Women's Summer Dress">
-                    <div class="product-content">
-                        <h3>Women's Summer Dress</h3>
-                        <p>Lightweight and breathable for hot summer days.</p>
-                        <div class="price">
-                            
-                           <div class="cart-item-price">₹1799</div>
-                        </div>
-                        <div class="size-selector">
-                            <span class="size-option">S</span>
-                            <span class="size-option selected">M</span>
-                            <span class="size-option">L</span>
-                            <span class="size-option">XL</span>
-                        </div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Denim Jeans">
-                    <div class="product-content">
-                        <h3>Men's Shoes</h3>
-                        <p>Lightweight and cushioned for maximum comfort.</p>
-                        <div class="price">₹1,599</div>
-                        <div class="size-selector">
-                            <span class="size-option">8</span>
-                            <span class="size-option">9</span>
-                            <span class="size-option selected">10</span>
-                            <span class="size-option">11</span>
-                        </div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Leather Handbag">
-                    <div class="product-content">
-                        <h3>Women's Dress</h3>
-                        <p>Elegant and spacious with multiple compartments.</p>
-                        <div class="price">₹3,299</div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <span class="product-badge">Popular</span>
-                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Running Shoes">
-                    <div class="product-content">
-                        <h3>Men's Jeans</h3>
-                        <p>Classic fit jeans with premium denim fabric..</p>
-                        <div class="price">₹2,999</div>
-                        <div class="size-selector">
-                            <span class="size-option">M</span>
-                            <span class="size-option">L</span>
-                            <span class="size-option selected">XL</span>
-                            <span class="size-option">XXL</span>
-                        </div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Silk Scarf">
-                    <div class="product-content">
-                        <h3>Women's OutFit</h3>
-                        <p>Luxurious 100% silk with elegant patterns.</p>
-                        <div class="price">₹1,199</div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1527719327859-c6ce80353573?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Formal Suit">
-                    <div class="product-content">
-                        <h3>Men's Formal Suit</h3>
-                        <p>Premium wool blend for business occasions.</p>
-                        <div class="price"> ₹6,999 </div>
-                        <div class="size-selector">
-                            <span class="size-option">M</span>
-                            <span class="size-option selected">L</span>
-                            <span class="size-option">XL</span>
-                            <span class="size-option">XXL</span>
-                        </div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <span class="product-badge">New</span>
-                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Casual T-Shirt">
-                    <div class="product-content">
-                        <h3>Women's Casual T-Shirt</h3>
-                        <p>Soft cotton with a relaxed fit for everyday wear.</p>
-                        <div class="price"> ₹4999
-                         </div>
-                        <div class="size-selector">
-                            <span class="size-option">XS</span>
-                            <span class="size-option selected">S</span>
-                            <span class="size-option">M</span>
-                            <span class="size-option">L</span>
-                        </div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
+            <div class="products-grid" id="productsContainer">
+                <!-- Products will be dynamically inserted here -->
             </div>
         </div>
     </section>
 
-    <section class="about" id="about" style="padding: 4rem 0; background-color: var(--light-color);">
-        <div class="container">
-            <div class="section-title">
-                <h2>About Haridra Softtech FashionHub</h2>
-            </div>
-            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <p>FashionHub is your one-stop destination for trendy and affordable fashion. We believe that everyone deserves to look their best without breaking the bank. Our carefully curated collections feature the latest styles at prices that won't hurt your wallet.</p>
-                <p>With a focus on quality, comfort, and style, we bring you clothing and accessories that help you express your unique personality. Our team of fashion experts works tirelessly to ensure our collections are always fresh and on-trend.</p>
-            </div>
+            
+                              
+<section class="about" id="about" style="padding: 4rem 0; background-color: var(--light-color);">
+    <div class="container">
+        <div class="section-title">
+            <h2>About Haridra Softtech FashionHub</h2>
         </div>
-    </section>
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <p>FashionHub is your one-stop destination for the latest fashion trends and styles. We bring you high-quality clothing and accessories at affordable prices. Our mission is to make fashion accessible to everyone while maintaining the highest standards of quality and customer service.</p>
+                <p>Founded in 2020, we've grown to become a trusted name in online fashion, serving thousands of satisfied customers across India. Our team of fashion experts carefully curates each collection to ensure we offer the best styles for every occasion.</p>
+        </div>
+    </div>
+</section>
 
-    <section class="contact" id="contact" style="padding: 4rem 0;">
-        <div class="container">
-            <div class="section-title">
-                <h2>Contact Us</h2>
+<section class="contact" id="contact" style="padding: 4rem 0;">
+    <div class="container">
+        <div class="section-title">
+            <h2>Contact Us</h2>
+        </div>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3 style="color: var(--primary-color);">Get in Touch</h3>
+                <p>Have questions about our products or need assistance with your order? Our customer service team is here to help.</p>
+                <p><strong>Email:</strong> info@haridrasofttech.com</p>
+                <p><strong>Phone:</strong> +91 9949585248</p>
+                <p><strong>Address:</strong> #501, 5th floor, Manjeera Trinity Corporate, Kukatpally - 500072</p>
+                
+                <!-- Map Container -->
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.454971552718!2d78.39872821487615!3d17.39109778807055!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDIzJzI3LjkiTiA3OMKwMjQnMDEuOCJF!5e0!3m2!1sen!2sin!4v1624546787899!5m2!1sen!2sin" 
+                        width="100%" 
+                        height="250" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                <div>
-                    <h3 style="color: var(--primary-color);">Get in Touch</h3>
-                    <p>Have questions about our products or need assistance with your order? Our customer service team is here to help.</p>
-                    <p><strong>Email:</strong> info@haridrasofttech.com</p>
-                    <p><strong>Phone:</strong> +91 9949585248</p>
-                    <p><strong>Address:</strong> #501, 5th floor, Manjeera Trinity Corporate, Kukatpally - 500072</p>
-                </div>
-                <div>
-                    <form>
-                        <div style="margin-bottom: 1rem;">
-                            <label for="name" style="display: block; margin-bottom: 0.5rem;">Name</label>
-                            <input type="text" id="name" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div style="margin-bottom: 1rem;">
-                            <label for="email" style="display: block; margin-bottom: 0.5rem;">Email</label>
-                            <input type="email" id="email" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div style="margin-bottom: 1rem;">
-                            <label for="message" style="display: block; margin-bottom: 0.5rem;">Message</label>
-                            <textarea id="message" rows="4" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
-                        </div>
-                        <button type="submit" class="btn">Send Message</button>
-                    </form>
-                </div>
+            
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <footer>
         <div class="container">
@@ -583,7 +513,7 @@
             </div>
         </div>
     </footer>
-    <!-- 📧 Newsletter Signup Form -->
+   
      <!-- AI Chatbot Widget -->
 <div id="chatbot" class="chatbot">
     <div class="chatbot-header">
@@ -599,7 +529,16 @@
   
   <!-- Chatbot Toggle Button -->
   <button id="toggleChatbot" class="chatbot-toggle">💬</button>
-  
+  <!-- Newsletter Signup -->
+  <div class="popup-message popup-info" id="newsletterPopup" style="display: none; position: fixed; bottom: 20px; left: 20px; max-width: 350px;">
+    <button class="close-btn" style="position: absolute; top: 5px; right: 10px; background: none; border: none; color: white; font-size: 1.2rem;" onclick="document.getElementById('newsletterPopup').style.display = 'none'">&times;</button>
+    <h4 style="margin-top: 0;">Subscribe to our Newsletter</h4>
+    <p>Get exclusive offers and style tips delivered to your inbox!</p>
+    <div class="form-group" style="margin: 10px 0;">
+        <input type="email" id="newsletterEmail" placeholder="Your email address" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+    </div>
+    <button class="btn" style="width: 100%; padding: 8px;" onclick="subscribeNewsletter()">Subscribe</button>
+</div>
 
     <script src="script.js"></script> 
 </body>
