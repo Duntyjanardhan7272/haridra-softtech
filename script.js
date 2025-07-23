@@ -1072,40 +1072,104 @@ function attachAddressValidation() {
     });
 }
 
-// Razorpay Payment Integration
-function initiatePayment(order) {
-    const options = {
-        key: "rzp_test_YourRazorpayKey", // Replace with your actual key
-        amount: order.total * 100,
-        currency: "INR",
-        name: "Haridra Softtech FashionHub",
-        description: "Order Payment",
-        handler: function (response) {
-            // Verify payment on your server in a real application
-            finalizeOrder(order);
+// Payment Method Selection
+function showPaymentMethodSelection(order) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'flex';
+    modal.style.zIndex = '1002';
 
-            // Redirect to thank you page with order ID
-            window.location.href = `thank-you.html?order=${order.id}`;
-        },
-        prefill: {
-            name: currentUser?.name || '',
-            email: currentUser?.email || '',
-            contact: currentUser?.phone || ''
-        },
-        theme: {
-            color: "#e74c3c"
-        },
-        modal: {
-            ondismiss: function () {
-                // Optional: Handle when user closes the payment modal
-                console.log("Payment modal closed");
-            }
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Select Payment Method</h2>
+                <button class="close-btn" id="closePaymentModal">&times;</button>
+            </div>
+            <div style="padding: 1.5rem;">
+                <div class="payment-methods">
+                    <div class="payment-option" data-method="cod">
+                        <div class="payment-icon">💰</div>
+                        <div class="payment-details">
+                            <h3>Cash on Delivery</h3>
+                            <p>Pay when your order is delivered</p>
+                        </div>
+                        <input type="radio" name="paymentMethod" value="cod" checked>
+                    </div>
+                    
+                    <div class="payment-option" data-method="online">
+                        <div class="payment-icon">💳</div>
+                        <div class="payment-details">
+                            <h3>Online Payment</h3>
+                            <p>Credit/Debit Card, UPI, Net Banking</p>
+                        </div>
+                        <input type="radio" name="paymentMethod" value="online">
+                    </div>
+                </div>
+                
+                <div class="order-summary" style="margin: 1.5rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <h4>Order Summary</h4>
+                    <p>Total Amount: <strong>₹${order.total}</strong></p>
+                    <p>Items: ${order.items.length} product(s)</p>
+                </div>
+                
+                <button class="checkout-btn" id="confirmPaymentBtn">Proceed with Payment</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+
+    // Make payment options clickable
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('click', () => {
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            option.querySelector('input[type="radio"]').checked = true;
+        });
+    });
+
+    // Close modal
+    document.getElementById('closePaymentModal').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        document.body.style.overflow = 'auto';
+    });
+
+    // Confirm payment
+    document.getElementById('confirmPaymentBtn').addEventListener('click', () => {
+        const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        document.body.removeChild(modal);
+        document.body.style.overflow = 'auto';
+        
+        if (selectedMethod === 'cod') {
+            initiateCOD(order);
+        } else {
+            initiateOnlinePayment(order);
         }
-    };
-
-    const rzp = new Razorpay(options);
-    rzp.open();
+    });
 }
+
+// Cash on Delivery
+function initiateCOD(order) {
+    if (confirm(`Confirm Cash on Delivery order for ₹${order.total}?`)) {
+        order.paymentMethod = 'Cash on Delivery';
+        order.status = 'confirmed';
+        finalizeOrder(order);
+        showPaymentSuccessNotification();
+    }
+}
+
+// Online Payment (placeholder for future implementation)
+function initiateOnlinePayment(order) {
+    // For now, simulate online payment
+    if (confirm(`Proceed with online payment of ₹${order.total}?`)) {
+        order.paymentMethod = 'Online Payment';
+        order.status = 'confirmed';
+        finalizeOrder(order);
+        showPaymentSuccessNotification();
+    }
+}
+
 
 function checkout() {
     if (cart.length === 0) {
@@ -1224,7 +1288,8 @@ function checkout() {
             shippingAddress: { ...selectedAddress }
         };
 
-        initiatePayment(newOrder);
+        // Show payment method selection
+        showPaymentMethodSelection(newOrder);
     });
 }
 
