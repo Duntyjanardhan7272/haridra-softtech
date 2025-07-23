@@ -297,26 +297,45 @@ function updateProfileInfo() {
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
         }
 
-        userAvatar.src = currentUser.avatar;
-        userName.textContent = currentUser.name;
-        userEmail.textContent = currentUser.email;
-        ordersCount.textContent = orders.filter(order => order.userId === currentUser.id).length;
+        // Safely update elements if they exist
+        const userAvatarEl = document.getElementById('userAvatar');
+        const userNameEl = document.getElementById('userName');
+        const userEmailEl = document.getElementById('userEmail');
+        const ordersCountEl = document.getElementById('ordersCount');
+        const cartItemsCountEl = document.getElementById('cartItemsCount');
+        const profileNameEl = document.getElementById('profileName');
+        const profileEmailEl = document.getElementById('profileEmail');
+        const profilePhoneEl = document.getElementById('profilePhone');
+        const profileDobEl = document.getElementById('profileDob');
+
+        if (userAvatarEl) userAvatarEl.src = currentUser.avatar;
+        if (userNameEl) userNameEl.textContent = currentUser.name;
+        if (userEmailEl) userEmailEl.textContent = currentUser.email;
+        
+        const userOrders = orders.filter(order => order.userId === currentUser.id);
+        if (ordersCountEl) ordersCountEl.textContent = userOrders.length;
+        
+        const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+        if (cartItemsCountEl) cartItemsCountEl.textContent = cartCount;
 
         // Update profile form
-        if (profileName) profileName.value = currentUser.name;
-        if (profileEmail) profileEmail.value = currentUser.email;
-        if (profilePhone) profilePhone.value = currentUser.phone || '';
-        if (profileDob) profileDob.value = currentUser.dob || '';
+        if (profileNameEl) profileNameEl.value = currentUser.name || '';
+        if (profileEmailEl) profileEmailEl.value = currentUser.email || '';
+        if (profilePhoneEl) profilePhoneEl.value = currentUser.phone || '';
+        if (profileDobEl) profileDobEl.value = currentUser.dob || '';
     }
 }
 
 // Render order history
 function renderOrderHistory() {
-    orderHistory.innerHTML = '';
+    const orderHistoryEl = document.getElementById('orderHistory');
+    if (!orderHistoryEl || !currentUser) return;
+    
+    orderHistoryEl.innerHTML = '';
     const userOrders = orders.filter(order => order.userId === currentUser.id).slice(0, 3);
 
     if (userOrders.length === 0) {
-        orderHistory.innerHTML = '<tr><td colspan="4" style="text-align: center;">No orders found</td></tr>';
+        orderHistoryEl.innerHTML = '<tr><td colspan="4" style="text-align: center;">No orders found</td></tr>';
         return;
     }
 
@@ -328,17 +347,20 @@ function renderOrderHistory() {
               <td>₹${order.total}</td>
               <td><span class="order-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
           `;
-        orderHistory.appendChild(row);
+        orderHistoryEl.appendChild(row);
     });
 }
 
 // Render full order history
 function renderFullOrderHistory() {
-    fullOrderHistory.innerHTML = '';
+    const fullOrderHistoryEl = document.getElementById('fullOrderHistory');
+    if (!fullOrderHistoryEl || !currentUser) return;
+    
+    fullOrderHistoryEl.innerHTML = '';
     const userOrders = orders.filter(order => order.userId === currentUser.id);
 
     if (userOrders.length === 0) {
-        fullOrderHistory.innerHTML = '<tr><td colspan="6" style="text-align: center;">No orders found</td></tr>';
+        fullOrderHistoryEl.innerHTML = '<tr><td colspan="6" style="text-align: center;">No orders found</td></tr>';
         return;
     }
 
@@ -350,9 +372,18 @@ function renderFullOrderHistory() {
               <td>${order.items.length}</td>
               <td>₹${order.total}</td>
               <td><span class="order-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
-              <td><a href="#" class="view-order">View</a></td>
+              <td><a href="#" class="view-order" data-order-id="${order.id}">View</a></td>
           `;
-        fullOrderHistory.appendChild(row);
+        fullOrderHistoryEl.appendChild(row);
+    });
+    
+    // Add event listeners to view order links
+    document.querySelectorAll('.view-order').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const orderId = e.target.getAttribute('data-order-id');
+            showOrderDetails(orderId);
+        });
     });
 }
 
@@ -940,6 +971,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show corresponding section
             closeAllDashboardSections();
             document.getElementById(`${section}Section`).classList.add('active');
+            
+            // Update analytics if analytics section is opened
+            if (section === 'analytics') {
+                updateAnalyticsDisplay();
+            }
         });
     });
 
@@ -999,6 +1035,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add address button
     if (addAddressBtn) {
         addAddressBtn.addEventListener('click', addNewAddress);
+    }
+
+    // Contact form submission
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            if (!name || !email || !subject || !message) {
+                showCartNotification('Please fill in all fields.', 'error');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                showCartNotification('Please enter a valid email address.', 'error');
+                return;
+            }
+            
+            // Save contact message to localStorage (in real app, this would be sent to server)
+            const contactMessages = JSON.parse(localStorage.getItem('fashionhubContactMessages')) || [];
+            const newMessage = {
+                id: Date.now().toString(),
+                name,
+                email,
+                subject,
+                message,
+                date: new Date().toISOString(),
+                status: 'new'
+            };
+            
+            contactMessages.push(newMessage);
+            localStorage.setItem('fashionhubContactMessages', JSON.stringify(contactMessages));
+            
+            // Clear form
+            contactForm.reset();
+            
+            // Show success message
+            showCartNotification('Thank you for your message! We will get back to you soon.', 'success');
+        });
     }
 
     // Add to cart buttons
@@ -1154,8 +1234,8 @@ function initiateCOD(order) {
     if (confirm(`Confirm Cash on Delivery order for ₹${order.total}?`)) {
         order.paymentMethod = 'Cash on Delivery';
         order.status = 'confirmed';
+        order.paymentDate = new Date().toISOString();
         finalizeOrder(order);
-        showPaymentSuccessNotification();
     }
 }
 
@@ -1165,8 +1245,9 @@ function initiateOnlinePayment(order) {
     if (confirm(`Proceed with online payment of ₹${order.total}?`)) {
         order.paymentMethod = 'Online Payment';
         order.status = 'confirmed';
+        order.paymentDate = new Date().toISOString();
+        order.transactionId = 'TXN' + Date.now().toString().slice(-8);
         finalizeOrder(order);
-        showPaymentSuccessNotification();
     }
 }
 
@@ -1312,8 +1393,8 @@ function finalizeOrder(order) {
     cartSidebar.classList.remove('open');
     profileSidebar.classList.remove('open');
 
-    // Show success notification
-    showPaymentSuccessNotification();
+    // Show success notification with order details
+    showPaymentSuccessNotification(order);
 
     // Update profile info if open
     if (profileSidebar.classList.contains('open')) {
@@ -1393,15 +1474,87 @@ function setupCarousel() {
 
 function setupSearch() {
     const searchInput = document.getElementById('searchInput');
-    const productCards = document.querySelectorAll('.product-card');
-    searchInput?.addEventListener('input', () => {
-        const term = searchInput.value.toLowerCase();
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const productCards = document.querySelectorAll('.product-card');
+        
         productCards.forEach(card => {
             const text = card.innerText.toLowerCase();
-            card.style.display = text.includes(term) ? '' : 'none';
+            if (text.includes(term) || term === '') {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        // Hide suggestions when searching
+        if (term.length > 0) {
+            document.getElementById('searchSuggestions').style.display = 'none';
+        }
+    });
+}
+
+// Initialize search functionality
+document.addEventListener('DOMContentLoaded', setupSearch);
+
+// Category filtering functionality
+function setupCategoryNavigation() {
+    document.querySelectorAll('.category-card .btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const categoryCard = e.target.closest('.category-card');
+            const categoryName = categoryCard.querySelector('h3').textContent.toLowerCase();
+            
+            // Map category names to filter values
+            let filterCategory = '';
+            if (categoryName.includes('men')) filterCategory = 'men';
+            else if (categoryName.includes('women')) filterCategory = 'women';
+            else if (categoryName.includes('accessories')) filterCategory = 'accessories';
+            else if (categoryName.includes('footwear')) filterCategory = 'footwear';
+            
+            // Filter products
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                if (!filterCategory || cardCategory === filterCategory) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Scroll to products section
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+            
+            // Show notification
+            showCartNotification(`Showing ${categoryName} products`, 'info');
         });
     });
 }
+
+// Initialize category navigation
+document.addEventListener('DOMContentLoaded', setupCategoryNavigation);
+
+// Newsletter popup functionality
+function showNewsletterPopup() {
+    const popup = document.getElementById('newsletterPopup');
+    const hasSubscribed = localStorage.getItem('newsletterSubscribed');
+    const lastShown = localStorage.getItem('newsletterPopupLastShown');
+    const now = Date.now();
+    
+    // Show popup if user hasn't subscribed and it hasn't been shown in the last 24 hours
+    if (!hasSubscribed && (!lastShown || now - parseInt(lastShown) > 24 * 60 * 60 * 1000)) {
+        setTimeout(() => {
+            popup.style.display = 'block';
+            localStorage.setItem('newsletterPopupLastShown', now.toString());
+        }, 10000); // Show after 10 seconds
+    }
+}
+
+// Initialize newsletter popup
+document.addEventListener('DOMContentLoaded', showNewsletterPopup);
 
 function handleNewsletterSignup() {
     const emailInput = document.getElementById('newsletterEmail');
@@ -1421,6 +1574,31 @@ function handleNewsletterSignup() {
     msgBox.innerText = 'Thanks for subscribing!';
     msgBox.style.color = 'green';
     emailInput.value = '';
+}
+
+// Newsletter subscription function for the popup
+function subscribeNewsletter() {
+    const emailInput = document.getElementById('newsletterEmail');
+    const email = emailInput.value.trim();
+    
+    if (!email || !email.includes('@')) {
+        showCartNotification('Please enter a valid email address.', 'error');
+        return;
+    }
+    
+    // Save to localStorage
+    let list = JSON.parse(localStorage.getItem('fashionhubNewsletter')) || [];
+    if (!list.includes(email)) {
+        list.push(email);
+        localStorage.setItem('fashionhubNewsletter', JSON.stringify(list));
+        localStorage.setItem('newsletterSubscribed', 'true');
+        showCartNotification('Successfully subscribed to newsletter!', 'success');
+    } else {
+        showCartNotification('You are already subscribed!', 'info');
+    }
+    
+    emailInput.value = '';
+    document.getElementById('newsletterPopup').style.display = 'none';
 }
 
 
@@ -1516,20 +1694,268 @@ function showSuggestions(query) {
 
 }
 
-function showPaymentSuccessNotification() {
+function showPaymentSuccessNotification(order = null) {
     const notification = document.createElement('div');
-    notification.className = 'popup-message popup-success';
-    notification.innerHTML = `
-        <i class="fas fa-check-circle"></i> 
-        Payment successful! Your order has been placed.
+    notification.className = 'popup-message popup-success payment-success-notification';
+    notification.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 10000;
+        text-align: center;
+        min-width: 350px;
+        max-width: 500px;
+        animation: slideInScale 0.5s ease-out;
     `;
+    
+    notification.innerHTML = `
+        <div style="margin-bottom: 1.5rem;">
+            <i class="fas fa-check-circle" style="font-size: 3rem; color: white; margin-bottom: 1rem; display: block;"></i>
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.5rem;">Payment Successful!</h3>
+            <p style="margin: 0; opacity: 0.9;">Your order has been placed successfully.</p>
+            ${order ? `<p style="margin: 0.5rem 0 0 0; font-weight: bold;">Order ID: ${order.id}</p>` : ''}
+        </div>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            ${order ? `
+                <button id="downloadInvoiceBtn" class="btn" style="
+                    background: white; 
+                    color: #27ae60; 
+                    border: none; 
+                    padding: 0.75rem 1.5rem; 
+                    border-radius: 8px; 
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+                    <i class="fas fa-download"></i>
+                    Download Invoice
+                </button>
+            ` : ''}
+            
+            <button id="continueShoppingBtn" class="btn" style="
+                background: rgba(255,255,255,0.2); 
+                color: white; 
+                border: 2px solid white; 
+                padding: 0.75rem 1.5rem; 
+                border-radius: 8px; 
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            ">
+                Continue Shopping
+            </button>
+        </div>
+    `;
+    
     document.body.appendChild(notification);
 
-    setTimeout(() => {
+    // Add event listeners
+    if (order) {
+        document.getElementById('downloadInvoiceBtn').addEventListener('click', () => {
+            generateInvoicePDF(order);
+        });
+    }
+    
+    document.getElementById('continueShoppingBtn').addEventListener('click', () => {
         notification.remove();
-    }, 3000);
+        // Scroll to products section
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Auto remove after 10 seconds if user doesn't interact
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 10000);
 }
 
+
+// PDF Generation Function
+function generateInvoicePDF(order) {
+    // Check if jsPDF is loaded
+    if (typeof window.jsPDF === 'undefined') {
+        alert('PDF library is loading. Please try again in a moment.');
+        return;
+    }
+
+    const { jsPDF } = window.jsPDF;
+    const doc = new jsPDF();
+    
+    // Company Logo and Header
+    doc.setFillColor(44, 62, 80); // Primary color
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    // Company Name
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont(undefined, 'bold');
+    doc.text('Haridra Softtech FashionHub', 20, 25);
+    
+    // Tagline
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'normal');
+    doc.text('Trendy Clothing & Accessories', 20, 32);
+    
+    // Invoice Title
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(20);
+    doc.setFont(undefined, 'bold');
+    doc.text('INVOICE', 150, 25);
+    
+    // Order Details Box
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.5);
+    doc.rect(20, 50, 170, 30);
+    
+    // Order Information
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text('Order Details:', 25, 60);
+    
+    doc.setFont(undefined, 'normal');
+    doc.text(`Order ID: ${order.id}`, 25, 68);
+    doc.text(`Order Date: ${order.date}`, 25, 75);
+    doc.text(`Payment Method: ${order.paymentMethod || 'Not specified'}`, 100, 68);
+    doc.text(`Status: ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}`, 100, 75);
+    
+    // Customer Information
+    if (currentUser) {
+        doc.setFont(undefined, 'bold');
+        doc.text('Customer Information:', 25, 95);
+        
+        doc.setFont(undefined, 'normal');
+        doc.text(`Name: ${currentUser.name}`, 25, 103);
+        doc.text(`Email: ${currentUser.email}`, 25, 110);
+        if (currentUser.phone) {
+            doc.text(`Phone: ${currentUser.phone}`, 25, 117);
+        }
+    }
+    
+    // Shipping Address
+    if (order.shippingAddress) {
+        doc.setFont(undefined, 'bold');
+        doc.text('Shipping Address:', 100, 95);
+        
+        doc.setFont(undefined, 'normal');
+        const addr = order.shippingAddress;
+        doc.text(`${addr.street}`, 100, 103);
+        doc.text(`${addr.city}, ${addr.state} ${addr.zip}`, 100, 110);
+        doc.text(`${addr.country}`, 100, 117);
+    }
+    
+    // Items Table Header
+    let yPos = 135;
+    doc.setFillColor(240, 240, 240);
+    doc.rect(20, yPos, 170, 10, 'F');
+    
+    doc.setFont(undefined, 'bold');
+    doc.text('Item', 25, yPos + 7);
+    doc.text('Qty', 120, yPos + 7);
+    doc.text('Price', 140, yPos + 7);
+    doc.text('Total', 165, yPos + 7);
+    
+    // Items
+    yPos += 15;
+    doc.setFont(undefined, 'normal');
+    let subtotal = 0;
+    
+    order.items.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        
+        // Item name (truncate if too long)
+        let itemName = item.name;
+        if (itemName.length > 35) {
+            itemName = itemName.substring(0, 32) + '...';
+        }
+        
+        doc.text(itemName, 25, yPos);
+        if (item.size) {
+            doc.setFontSize(10);
+            doc.text(`Size: ${item.size}`, 25, yPos + 5);
+            doc.setFontSize(12);
+            yPos += 5;
+        }
+        
+        doc.text(item.quantity.toString(), 125, yPos);
+        doc.text(`₹${item.price.toLocaleString('en-IN')}`, 140, yPos);
+        doc.text(`₹${itemTotal.toLocaleString('en-IN')}`, 165, yPos);
+        
+        yPos += 12;
+        
+        // Add new page if needed
+        if (yPos > 250) {
+            doc.addPage();
+            yPos = 30;
+        }
+    });
+    
+    // Total Section
+    yPos += 10;
+    doc.setLineWidth(0.5);
+    doc.line(120, yPos, 190, yPos);
+    
+    yPos += 10;
+    doc.setFont(undefined, 'bold');
+    doc.text('Subtotal:', 140, yPos);
+    doc.text(`₹${subtotal.toLocaleString('en-IN')}`, 165, yPos);
+    
+    // Shipping (if applicable)
+    const shipping = subtotal >= 999 ? 0 : 50;
+    yPos += 8;
+    doc.setFont(undefined, 'normal');
+    doc.text('Shipping:', 140, yPos);
+    doc.text(shipping === 0 ? 'FREE' : `₹${shipping}`, 165, yPos);
+    
+    // Tax (if applicable)
+    const tax = Math.round(subtotal * 0.18); // 18% GST
+    yPos += 8;
+    doc.text('GST (18%):', 140, yPos);
+    doc.text(`₹${tax.toLocaleString('en-IN')}`, 165, yPos);
+    
+    // Final Total
+    const finalTotal = subtotal + shipping + tax;
+    yPos += 10;
+    doc.setLineWidth(1);
+    doc.line(120, yPos, 190, yPos);
+    
+    yPos += 10;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(14);
+    doc.text('Total Amount:', 140, yPos);
+    doc.text(`₹${finalTotal.toLocaleString('en-IN')}`, 165, yPos);
+    
+    // Footer
+    yPos += 20;
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(100, 100, 100);
+    doc.text('Thank you for shopping with Haridra Softtech FashionHub!', 25, yPos);
+    doc.text('For any queries, contact us at info@haridrasofttech.com or +91 9949585248', 25, yPos + 5);
+    
+    // Company Address
+    yPos += 15;
+    doc.text('Haridra Softtech FashionHub', 25, yPos);
+    doc.text('#501, 5th floor, Manjeera Trinity Corporate, Kukatpally - 500072', 25, yPos + 5);
+    
+    // Save the PDF
+    const fileName = `Invoice_${order.id}_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(fileName);
+    
+    // Show success message
+    showCartNotification('Invoice downloaded successfully!', 'success');
+}
 
 // Add this to your product data (near the top of script.js)
 const product = [
@@ -1804,23 +2230,93 @@ function trackPageView() {
 
 // Call this on page load
 document.addEventListener('DOMContentLoaded', trackPageView);
+
+// Update analytics display
+function updateAnalyticsDisplay() {
+    const traffic = JSON.parse(localStorage.getItem('siteTraffic')) || {
+        totalVisits: 0,
+        pages: {},
+        lastVisit: null
+    };
+    
+    // Update analytics cards
+    const totalVisitsEl = document.getElementById('totalVisits');
+    const currentPageViewsEl = document.getElementById('currentPageViews');
+    const lastVisitEl = document.getElementById('lastVisit');
+    
+    if (totalVisitsEl) totalVisitsEl.textContent = traffic.totalVisits;
+    if (currentPageViewsEl) currentPageViewsEl.textContent = traffic.pages[window.location.pathname] || 0;
+    if (lastVisitEl) {
+        if (traffic.lastVisit) {
+            const lastVisitDate = new Date(traffic.lastVisit);
+            lastVisitEl.textContent = lastVisitDate.toLocaleDateString() + ' ' + lastVisitDate.toLocaleTimeString();
+        } else {
+            lastVisitEl.textContent = 'Never';
+        }
+    }
+    
+    // Simple chart using ASCII
+    const chartCanvas = document.getElementById('analyticsChart');
+    if (chartCanvas && chartCanvas.getContext) {
+        const ctx = chartCanvas.getContext('2d');
+        ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+        
+        // Draw simple bar chart
+        const pages = Object.entries(traffic.pages);
+        const maxViews = Math.max(...Object.values(traffic.pages), 1);
+        const barWidth = chartCanvas.width / Math.max(pages.length, 1);
+        
+        pages.forEach(([page, views], index) => {
+            const barHeight = (views / maxViews) * (chartCanvas.height - 40);
+            const x = index * barWidth;
+            const y = chartCanvas.height - barHeight - 20;
+            
+            // Draw bar
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(x + 10, y, barWidth - 20, barHeight);
+            
+            // Draw label
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(page.substring(1) || 'Home', x + barWidth/2, chartCanvas.height - 5);
+            ctx.fillText(views.toString(), x + barWidth/2, y - 5);
+        });
+    }
+}
 // Product Loading and Filtering
 function loadProducts() {
-    const products = JSON.parse(localStorage.getItem('fashionhubProducts')) || [];
     const container = document.getElementById('productsContainer');
+    if (!container) return;
 
     container.innerHTML = '';
 
+    // Use the products array defined below
     products.forEach(product => {
         const card = document.createElement('div');
         card.className = 'product-card';
+        card.setAttribute('data-category', product.category);
+        
+        const originalPriceHTML = product.originalPrice ? 
+            `<span class="original-price">₹${product.originalPrice.toLocaleString('en-IN')}</span>` : '';
+        
+        const ratingStars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+        
         card.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
+            <div class="product-image">
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
+                <div class="wishlist-icon" data-product-id="${product.id}" onclick="toggleWishlist('${product.id}')">🤍</div>
+            </div>
             <div class="product-content">
                 <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <div class="price">₹${product.price.toLocaleString('en-IN')}</div>
-                <div class="rating">Rating: ${product.rating} ★</div>
+                <div class="price-container">
+                    ${originalPriceHTML}
+                    <div class="price">₹${product.price.toLocaleString('en-IN')}</div>
+                </div>
+                <div class="rating-container">
+                    <div class="rating-stars" data-rating="${product.rating}">${ratingStars}</div>
+                    <span class="rating-count">(${product.ratingCount || 0})</span>
+                </div>
                 <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
             </div>
         `;
@@ -1837,6 +2333,9 @@ function loadProducts() {
             }
         });
     });
+    
+    // Initialize wishlist icons
+    renderWishlistIcons();
 }
 
 // Initialize products on page load
