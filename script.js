@@ -448,7 +448,45 @@ function editAddress(id) {
                           </div>
                           <div class="form-col">
                               <label for="state">State</label>
-                              <input type="text" id="state" class="form-control" value="${address.state}" required>
+                              <select id="state" class="form-control" required>
+                                  <option value="">Select State</option>
+                                  <option value="Andhra Pradesh" ${address.state === 'Andhra Pradesh' ? 'selected' : ''}>Andhra Pradesh</option>
+                                  <option value="Arunachal Pradesh" ${address.state === 'Arunachal Pradesh' ? 'selected' : ''}>Arunachal Pradesh</option>
+                                  <option value="Assam" ${address.state === 'Assam' ? 'selected' : ''}>Assam</option>
+                                  <option value="Bihar" ${address.state === 'Bihar' ? 'selected' : ''}>Bihar</option>
+                                  <option value="Chhattisgarh" ${address.state === 'Chhattisgarh' ? 'selected' : ''}>Chhattisgarh</option>
+                                  <option value="Goa" ${address.state === 'Goa' ? 'selected' : ''}>Goa</option>
+                                  <option value="Gujarat" ${address.state === 'Gujarat' ? 'selected' : ''}>Gujarat</option>
+                                  <option value="Haryana" ${address.state === 'Haryana' ? 'selected' : ''}>Haryana</option>
+                                  <option value="Himachal Pradesh" ${address.state === 'Himachal Pradesh' ? 'selected' : ''}>Himachal Pradesh</option>
+                                  <option value="Jharkhand" ${address.state === 'Jharkhand' ? 'selected' : ''}>Jharkhand</option>
+                                  <option value="Karnataka" ${address.state === 'Karnataka' ? 'selected' : ''}>Karnataka</option>
+                                  <option value="Kerala" ${address.state === 'Kerala' ? 'selected' : ''}>Kerala</option>
+                                  <option value="Madhya Pradesh" ${address.state === 'Madhya Pradesh' ? 'selected' : ''}>Madhya Pradesh</option>
+                                  <option value="Maharashtra" ${address.state === 'Maharashtra' ? 'selected' : ''}>Maharashtra</option>
+                                  <option value="Manipur" ${address.state === 'Manipur' ? 'selected' : ''}>Manipur</option>
+                                  <option value="Meghalaya" ${address.state === 'Meghalaya' ? 'selected' : ''}>Meghalaya</option>
+                                  <option value="Mizoram" ${address.state === 'Mizoram' ? 'selected' : ''}>Mizoram</option>
+                                  <option value="Nagaland" ${address.state === 'Nagaland' ? 'selected' : ''}>Nagaland</option>
+                                  <option value="Odisha" ${address.state === 'Odisha' ? 'selected' : ''}>Odisha</option>
+                                  <option value="Punjab" ${address.state === 'Punjab' ? 'selected' : ''}>Punjab</option>
+                                  <option value="Rajasthan" ${address.state === 'Rajasthan' ? 'selected' : ''}>Rajasthan</option>
+                                  <option value="Sikkim" ${address.state === 'Sikkim' ? 'selected' : ''}>Sikkim</option>
+                                  <option value="Tamil Nadu" ${address.state === 'Tamil Nadu' ? 'selected' : ''}>Tamil Nadu</option>
+                                  <option value="Telangana" ${address.state === 'Telangana' ? 'selected' : ''}>Telangana</option>
+                                  <option value="Tripura" ${address.state === 'Tripura' ? 'selected' : ''}>Tripura</option>
+                                  <option value="Uttar Pradesh" ${address.state === 'Uttar Pradesh' ? 'selected' : ''}>Uttar Pradesh</option>
+                                  <option value="Uttarakhand" ${address.state === 'Uttarakhand' ? 'selected' : ''}>Uttarakhand</option>
+                                  <option value="West Bengal" ${address.state === 'West Bengal' ? 'selected' : ''}>West Bengal</option>
+                                  <option value="Andaman and Nicobar Islands" ${address.state === 'Andaman and Nicobar Islands' ? 'selected' : ''}>Andaman and Nicobar Islands</option>
+                                  <option value="Chandigarh" ${address.state === 'Chandigarh' ? 'selected' : ''}>Chandigarh</option>
+                                  <option value="Dadra and Nagar Haveli and Daman and Diu" ${address.state === 'Dadra and Nagar Haveli and Daman and Diu' ? 'selected' : ''}>Dadra and Nagar Haveli and Daman and Diu</option>
+                                  <option value="Delhi" ${address.state === 'Delhi' ? 'selected' : ''}>Delhi</option>
+                                  <option value="Jammu and Kashmir" ${address.state === 'Jammu and Kashmir' ? 'selected' : ''}>Jammu and Kashmir</option>
+                                  <option value="Ladakh" ${address.state === 'Ladakh' ? 'selected' : ''}>Ladakh</option>
+                                  <option value="Lakshadweep" ${address.state === 'Lakshadweep' ? 'selected' : ''}>Lakshadweep</option>
+                                  <option value="Puducherry" ${address.state === 'Puducherry' ? 'selected' : ''}>Puducherry</option>
+                              </select>
                           </div>
                       </div>
                       <div class="form-row">
@@ -562,7 +600,45 @@ function addNewAddress() {
                           </div>
                           <div class="form-col">
                               <label for="newState">State</label>
-                              <input type="text" id="newState" class="form-control" required>
+                              <select id="newState" class="form-control" required>
+                                  <option value="">Select State</option>
+                                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                  <option value="Assam">Assam</option>
+                                  <option value="Bihar">Bihar</option>
+                                  <option value="Chhattisgarh">Chhattisgarh</option>
+                                  <option value="Goa">Goa</option>
+                                  <option value="Gujarat">Gujarat</option>
+                                  <option value="Haryana">Haryana</option>
+                                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                  <option value="Jharkhand">Jharkhand</option>
+                                  <option value="Karnataka">Karnataka</option>
+                                  <option value="Kerala">Kerala</option>
+                                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                  <option value="Maharashtra">Maharashtra</option>
+                                  <option value="Manipur">Manipur</option>
+                                  <option value="Meghalaya">Meghalaya</option>
+                                  <option value="Mizoram">Mizoram</option>
+                                  <option value="Nagaland">Nagaland</option>
+                                  <option value="Odisha">Odisha</option>
+                                  <option value="Punjab">Punjab</option>
+                                  <option value="Rajasthan">Rajasthan</option>
+                                  <option value="Sikkim">Sikkim</option>
+                                  <option value="Tamil Nadu">Tamil Nadu</option>
+                                  <option value="Telangana">Telangana</option>
+                                  <option value="Tripura">Tripura</option>
+                                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                  <option value="Uttarakhand">Uttarakhand</option>
+                                  <option value="West Bengal">West Bengal</option>
+                                  <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                  <option value="Chandigarh">Chandigarh</option>
+                                  <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                                  <option value="Delhi">Delhi</option>
+                                  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                  <option value="Ladakh">Ladakh</option>
+                                  <option value="Lakshadweep">Lakshadweep</option>
+                                  <option value="Puducherry">Puducherry</option>
+                              </select>
                           </div>
                       </div>
                       <div class="form-row">
@@ -1175,15 +1251,6 @@ function showPaymentMethodSelection(order) {
                         </div>
                         <input type="radio" name="paymentMethod" value="cod" checked>
                     </div>
-                    
-                    <div class="payment-option" data-method="online">
-                        <div class="payment-icon">💳</div>
-                        <div class="payment-details">
-                            <h3>Online Payment</h3>
-                            <p>Credit/Debit Card, UPI, Net Banking</p>
-                        </div>
-                        <input type="radio" name="paymentMethod" value="online">
-                    </div>
                 </div>
                 
                 <div class="order-summary" style="margin: 1.5rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
@@ -1217,15 +1284,11 @@ function showPaymentMethodSelection(order) {
 
     // Confirm payment
     document.getElementById('confirmPaymentBtn').addEventListener('click', () => {
-        const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
         document.body.removeChild(modal);
         document.body.style.overflow = 'auto';
         
-        if (selectedMethod === 'cod') {
-            initiateCOD(order);
-        } else {
-            initiateOnlinePayment(order);
-        }
+        // Since we only have COD now, directly initiate COD
+        initiateCOD(order);
     });
 }
 
@@ -2155,7 +2218,7 @@ function handleQuickOption(option) {
                 response = "We offer: \n- Free shipping on orders over ₹999\n- Standard delivery: 3-5 business days\n- Express delivery: 1-2 business days (additional ₹150)";
                 break;
             case 'Payment options':
-                response = "We accept:\n💳 Credit/Debit Cards\n📱 UPI Payments\n💰 Net Banking\n💸 Cash on Delivery (COD)\nAll payments are secure with Razorpay.";
+                response = "We currently accept:\n💸 Cash on Delivery (COD)\nPay when your order is delivered to your doorstep. No advance payment required!";
                 break;
             case 'Size guides':
                 response = "You can find size guides on each product page. If you need help choosing the right size, let me know which product you're interested in!";
