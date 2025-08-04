@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haridra Softtech FashionHub - Trendy Clothing & Accessories</title>
     <link rel="stylesheet" href="style.css" />
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-       <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-       <script>
-           window.dataLayer = window.dataLayer || [];
-           function gtag(){dataLayer.push(arguments);}
-           gtag('js', new Date());
-           gtag('config', 'G-XXXXXXX');
-       </script>
-      
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXX');
+    </script>
+
 </head>
+
 <body>
     <!-- Cart Notification -->
     <div class="popup-message popup-success" id="cartNotification" style="display: none;">
         <i class="fas fa-check-circle"></i> Product added to cart!
     </div>
-    
+
 
     <!-- Cart Sidebar -->
     <div class="cart-sidebar" id="cartSidebar">
@@ -45,11 +47,12 @@
         </div>
         <div class="profile-content">
             <div class="user-info">
-                <img src="https://ui-avatars.com/api/?name=John+Doe&background=e74c3c&color=fff" alt="User Avatar" class="user-avatar" id="userAvatar">
+                <img src="https://ui-avatars.com/api/?name=John+Doe&background=e74c3c&color=fff" alt="User Avatar"
+                    class="user-avatar" id="userAvatar">
                 <h3 class="user-name" id="userName">John Doe</h3>
                 <p class="user-email" id="userEmail">john@example.com</p>
             </div>
-            
+
             <div class="profile-stats">
                 <div class="stat-card">
                     <div class="stat-value" id="ordersCount">0</div>
@@ -60,9 +63,10 @@
                     <div class="stat-label">Cart Items</div>
                 </div>
             </div>
-            
+
             <ul class="profile-menu">
-                <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i>
+                        Dashboard</a></li>
                 <li><a href="#" data-section="orders"><i class="fas fa-shopping-bag"></i> My Orders</a></li>
                 <li><a href="#" data-section="profile"><i class="fas fa-user"></i> Profile</a></li>
                 <li><a href="#" data-section="address"><i class="fas fa-map-marker-alt"></i> Address</a></li>
@@ -78,8 +82,9 @@
             <button class="btn btn-secondary" onclick="showDashboardSection()">Back to Dashboard</button>
         </div>
         <h2 class="dashboard-section-title">Dashboard Overview</h2>
-        <p>Welcome back to your account dashboard. Here you can manage your orders, update your profile, and change your account settings.</p>
-        
+        <p>Welcome back to your account dashboard. Here you can manage your orders, update your profile, and change your
+            account settings.</p>
+
         <div class="recent-orders">
             <h3>Recent Orders</h3>
             <table class="order-history">
@@ -104,7 +109,7 @@
         </div>
         <h2 class="dashboard-section-title">My Orders</h2>
         <p>View your complete order history and track current orders.</p>
-        
+
         <table class="order-history">
             <thead>
                 <tr>
@@ -128,7 +133,7 @@
         </div>
         <h2 class="dashboard-section-title">Profile Information</h2>
         <p>Update your personal information and account details.</p>
-        
+
         <form id="profileForm">
             <div class="form-row">
                 <div class="form-col">
@@ -140,7 +145,7 @@
                     <input type="email" id="profileEmail" class="form-control" required>
                 </div>
             </div>
-            
+
             <div class="form-row">
                 <div class="form-col">
                     <label for="profilePhone">Phone Number</label>
@@ -151,7 +156,7 @@
                     <input type="date" id="profileDob" class="form-control">
                 </div>
             </div>
-            
+
             <button type="submit" class="save-btn">Save Changes</button>
             <div id="profileSuccessMsg" class="success-msg" style="display: none;"></div>
         </form>
@@ -163,11 +168,11 @@
         </div>
         <h2 class="dashboard-section-title">My Addresses</h2>
         <p>Manage your shipping and billing addresses.</p>
-        
+
         <div id="addressList">
             <!-- Addresses will be dynamically inserted here -->
         </div>
-        
+
         <button class="btn" id="addAddressBtn">Add New Address</button>
     </div>
 
@@ -177,7 +182,7 @@
         </div>
         <h2 class="dashboard-section-title">Account Settings</h2>
         <p>Change your password and notification preferences.</p>
-        
+
         <form id="settingsForm">
             <h3>Change Password</h3>
             <div class="form-row">
@@ -186,7 +191,7 @@
                     <input type="password" id="currentPassword" class="form-control">
                 </div>
             </div>
-            
+
             <div class="form-row">
                 <div class="form-col">
                     <label for="newPassword">New Password</label>
@@ -197,7 +202,7 @@
                     <input type="password" id="confirmNewPassword" class="form-control">
                 </div>
             </div>
-            
+
             <h3>Notification Preferences</h3>
             <div class="form-row">
                 <div class="form-col">
@@ -211,40 +216,61 @@
                     </label>
                 </div>
             </div>
-            
+
             <button type="submit" class="save-btn">Update Settings</button>
             <div id="settingsSuccessMsg" class="success-msg" style="display: none;"></div>
         </form>
-    </div> 
-        <!-- Add this to your dashboard section -->
-<div class="dashboard-content" id="analyticsSection">
-    <div style="margin-bottom: 1rem;">
-        <button class="btn btn-secondary" onclick="showDashboardSection()">Back to Dashboard</button>
     </div>
-    <h2 class="dashboard-section-title">Site Analytics</h2>
-    
-    <div class="analytics-cards">
-        <div class="analytics-card">
-            <h3>Total Visits</h3>
-            <div class="analytics-value" id="totalVisits">0</div>
+    <!-- Add this to your dashboard section -->
+    <div class="dashboard-content" id="analyticsSection">
+        <div style="margin-bottom: 1rem;">
+            <button class="btn btn-secondary" onclick="showDashboardSection()">Back to Dashboard</button>
         </div>
-        <div class="analytics-card">
-            <h3>Current Page Views</h3>
-            <div class="analytics-value" id="currentPageViews">0</div>
+        <h2 class="dashboard-section-title">Site Analytics</h2>
+
+        <div class="analytics-cards">
+            <div class="analytics-card">
+                <h3>Total Clicks</h3>
+                <div class="analytics-value" id="totalClicks">0</div>
+            </div>
+            <div class="analytics-card">
+                <h3>Total Logins</h3>
+                <div class="analytics-value" id="totalLogins">0</div>
+            </div>
+            <div class="analytics-card">
+                <h3>Total Interactions</h3>
+                <div class="analytics-value" id="totalInteractions">0</div>
+            </div>
+            <div class="analytics-card">
+                <h3>Daily Clicks</h3>
+                <div class="analytics-value" id="dailyClicks">0</div>
+            </div>
+            <div class="analytics-card">
+                <h3>Daily Logins</h3>
+                <div class="analytics-value" id="dailyLogins">0</div>
+            </div>
+            <div class="analytics-card">
+                <h3>Monthly Average</h3>
+                <div class="analytics-value" id="monthlyAverage">0</div>
+            </div>
+            <div class="analytics-card">
+                <h3>Last Visit</h3>
+                <div class="analytics-value" id="lastVisit">Never</div>
+            </div>
         </div>
-        <div class="analytics-card">
-            <h3>Last Visit</h3>
-            <div class="analytics-value" id="lastVisit">Never</div>
+
+        <h3 style="margin-top: 2rem;">Monthly Analytics Trend</h3>
+        <div id="monthlyAnalyticsChart">
+            <canvas id="analyticsChart" width="800" height="300"></canvas>
+            <!-- Monthly trend chart will be rendered here -->
+        </div>
+
+        <h3 style="margin-top: 2rem;">Page Popularity</h3>
+        <div id="pagePopularityList">
+            <!-- Page popularity will be displayed here -->
         </div>
     </div>
-    
-    <h3 style="margin-top: 2rem;">Page Popularity</h3>
-    <div id="pagePopularityChart">
-        <canvas id="analyticsChart" width="400" height="200"></canvas>
-        <!-- Chart will be rendered here -->
-    </div>
-</div>
-   
+
 
     <header>
         <div class="container header-container">
@@ -258,11 +284,11 @@
             <nav>
                 <ul>
                     <!-- 🔍 Search Bar -->
-                     <div class="search-section">
-                    <input type="text" id="searchInput" placeholder="Search for products or categories...">
-                    <div id="searchSuggestions" class="suggestions-box"></div> <!-- NEW -->
-                  </div>
-                  
+                    <div class="search-section">
+                        <input type="text" id="searchInput" placeholder="Search for products or categories...">
+                        <div id="searchSuggestions" class="suggestions-box"></div> <!-- NEW -->
+                    </div>
+
                     <li><a href="#home">Home</a></li>
                     <li><a href="#categories">Categories</a></li>
                     <li><a href="#products">Products</a></li>
@@ -271,9 +297,9 @@
                     <li><a href="#" id="cartLink">Cart (<span id="cartCount">0</span>)</a></li>
                     <li id="authNavItem">
                         <button class="login-btn" id="loginBtn">Login</button>
-                   
+
                     </li>
-                       
+
                 </ul>
             </nav>
         </div>
@@ -306,11 +332,11 @@
                         Don't have an account? <a id="showRegister">Register</a>
                     </div>
                 </div>
-                
+
                 <div class="auth-divider">
                     <span>OR</span>
                 </div>
-                
+
                 <div class="auth-form" id="registerForm" style="display: none;">
                     <h3>Register</h3>
                     <form id="register">
@@ -343,17 +369,18 @@
             </div>
         </div>
     </div>
-   
+
     <!-- 🎞️ Hero Banner Carousel -->
-<div class="carousel">
-    <div class="carousel-slide active">🔥 Summer Collection</div>
-    <div class="carousel-slide">💥 Flat 50% Off!</div>
-    <div class="carousel-slide">🧵 Stylish Trends 2025</div>
-  </div>
+    <div class="carousel">
+        <div class="carousel-slide active">🔥 Summer Collection</div>
+        <div class="carousel-slide">💥 Flat 50% Off!</div>
+        <div class="carousel-slide">🧵 Stylish Trends 2025</div>
+    </div>
     <section class="hero" id="home">
         <div class="container">
             <h2>Discover Your Perfect Style</h2>
-            <p>Shop the latest trends in fashion with our exclusive collection of clothing and accessories for men and women. Quality fabrics, perfect fits, and unbeatable prices.</p>
+            <p>Shop the latest trends in fashion with our exclusive collection of clothing and accessories for men and
+                women. Quality fabrics, perfect fits, and unbeatable prices.</p>
             <a href="#products" class="btn">Shop Now</a>
         </div>
     </section>
@@ -365,139 +392,248 @@
             </div>
             <div class="categories-grid">
                 <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Men's Clothing">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                        alt="Men's Clothing">
                     <div class="category-content">
                         <h3>Men's Clothing</h3>
                         <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
                 <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Women's Clothing">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                        alt="Women's Clothing">
                     <div class="category-content">
                         <h3>Women's Clothing</h3>
                         <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
                 <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1534215754734-18e55d13e346?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Accessories">
+                    <img src="https://images.unsplash.com/photo-1534215754734-18e55d13e346?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                        alt="Accessories">
                     <div class="category-content">
                         <h3>Accessories</h3>
                         <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
                 <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Footwear">
+                    <img src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                        alt="Footwear">
                     <div class="category-content">
                         <h3>Footwear</h3>
                         <a href="#" class="btn btn-secondary">Shop Now</a>
                     </div>
                 </div>
-            </div>        
+            </div>
         </div>
     </section>
-      <!-- Products Section -->
-      <section class="products" id="products">
+    <!-- Products Section -->
+    <section class="products" id="products">
         <div class="container">
             <div class="section-title">
                 <h2>Featured Products</h2>
+                <p>Discover our handpicked collection organized by categories</p>
             </div>
-            <div class="products-grid" id="productsContainer">
-                <!-- Products will be dynamically inserted here -->
+
+            <!-- Category Filter Buttons -->
+            <div class="category-filters">
+                <button class="filter-btn active" data-category="all">All Products</button>
+                <button class="filter-btn" data-category="men">Men's Collection</button>
+                <button class="filter-btn" data-category="women">Women's Collection</button>
+                <button class="filter-btn" data-category="accessories">Accessories</button>
+                <button class="filter-btn" data-category="footwear">Footwear</button>
+            </div>
+
+            <!-- Category-wise Featured Products -->
+            <div class="featured-categories">
+                <!-- Men's Featured Products -->
+                <div class="category-section" id="men-featured">
+                    <h3 class="category-title">
+                        <i class="fas fa-male"></i>
+                        Men's Collection
+                        <span class="view-all-link" onclick="filterByCategory('men')">View All →</span>
+                    </h3>
+                    <div class="products-grid" id="menProductsContainer">
+                        <!-- Men's products will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Women's Featured Products -->
+                <div class="category-section" id="women-featured">
+                    <h3 class="category-title">
+                        <i class="fas fa-female"></i>
+                        Women's Collection
+                        <span class="view-all-link" onclick="filterByCategory('women')">View All →</span>
+                    </h3>
+                    <div class="products-grid" id="womenProductsContainer">
+                        <!-- Women's products will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Accessories Featured Products -->
+                <div class="category-section" id="accessories-featured">
+                    <h3 class="category-title">
+                        <i class="fas fa-gem"></i>
+                        Accessories
+                        <span class="view-all-link" onclick="filterByCategory('accessories')">View All →</span>
+                    </h3>
+                    <div class="products-grid" id="accessoriesProductsContainer">
+                        <!-- Accessories products will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Footwear Featured Products -->
+                <div class="category-section" id="footwear-featured">
+                    <h3 class="category-title">
+                        <i class="fas fa-shoe-prints"></i>
+                        Footwear
+                        <span class="view-all-link" onclick="filterByCategory('footwear')">View All →</span>
+                    </h3>
+                    <div class="products-grid" id="footwearProductsContainer">
+                        <!-- Footwear products will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Products Grid (hidden by default) -->
+            <div class="products-grid" id="productsContainer" style="display: none;">
+                <!-- All products will be dynamically inserted here -->
             </div>
         </div>
     </section>
 
-            
-                              
-<section class="about" id="about" style="padding: 4rem 0; background-color: var(--light-color);">
-    <div class="container">
-        <div class="section-title">
-            <h2>About Haridra Softtech FashionHub</h2>
-        </div>
-        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <p>FashionHub is your one-stop destination for the latest fashion trends and styles. We bring you high-quality clothing and accessories at affordable prices. Our mission is to make fashion accessible to everyone while maintaining the highest standards of quality and customer service.</p>
-                <p>Founded in 2020, we've grown to become a trusted name in online fashion, serving thousands of satisfied customers across India. Our team of fashion experts carefully curates each collection to ensure we offer the best styles for every occasion.</p>
-        </div>
-    </div>
-</section>
 
-<section class="contact" id="contact" style="padding: 4rem 0;">
-    <div class="container">
-        <div class="section-title">
-            <h2>Contact Us</h2>
+
+    <section class="about" id="about" style="padding: 4rem 0; background-color: var(--light-color);">
+        <div class="container">
+            <div class="section-title">
+                <h2>About Haridra Softtech FashionHub</h2>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p>FashionHub is your one-stop destination for the latest fashion trends and styles. We bring you
+                    high-quality clothing and accessories at affordable prices. Our mission is to make fashion
+                    accessible to everyone while maintaining the highest standards of quality and customer service.</p>
+                <p>Founded in 2020, we've grown to become a trusted name in online fashion, serving thousands of
+                    satisfied customers across India. Our team of fashion experts carefully curates each collection to
+                    ensure we offer the best styles for every occasion.</p>
+            </div>
         </div>
-        <div class="contact-content">
-            <div class="contact-info">
-                <h3 style="color: var(--primary-color);">Get in Touch</h3>
-                <p>Have questions about our products or need assistance with your order? Our customer service team is here to help.</p>
-                <p><strong>Email:</strong> info@haridrasofttech.com</p>
-                <p><strong>Phone:</strong> +91 9949585248</p>
-                <p><strong>Address:</strong> #501, 5th floor, Manjeera Trinity Corporate, Kukatpally - 500072</p>
-                
-                <!-- Map Container -->
-                <div class="map-container">
-                    <h4 style="color: var(--primary-color); margin-bottom: 1rem;">Our Location</h4>
-                    
-                    <!-- Embedded Google Map -->
-                    <div class="embedded-map">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3805.5234567890123!2d78.3870!3d17.4875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDI5JzE1LjAiTiA3OMKwMjMnMTMuMiJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
-                            width="100%" 
-                            height="250" 
-                            style="border:0; border-radius: 8px;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
+    </section>
+
+    <section class="contact" id="contact" style="padding: 4rem 0;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3 style="color: var(--primary-color);">Get in Touch</h3>
+                    <p>Have questions about our products or need assistance with your order? Our customer service team
+                        is here to help.</p>
+                    <p><strong>Email:</strong> info@haridrasofttech.com</p>
+                    <p><strong>Phone:</strong> +91 9949585248</p>
+                    <p><strong>Address:</strong> #501, 5th floor, Manjeera Trinity Corporate, Kukatpally - 500072</p>
+
+                    <!-- Map Container -->
+                    <div class="map-container">
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">Our Location</h4>
+
+                        <!-- Embedded Google Map -->
+                        <div class="embedded-map">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3805.5234567890123!2d78.3870!3d17.4875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDI5JzE1LjAiTiA3OMKwMjMnMTMuMiJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+                                width="100%" height="250" style="border:0; border-radius: 8px;" allowfullscreen=""
+                                loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+
+                        <!-- Map Link -->
+                        <a href="https://www.google.com/maps/place/Manjeera+Trinity+Corporate,+JNTU+-+Hitech+City+Rd,+KPHB+Colony,+Kukatpally,+Hyderabad,+Telangana+500072/@17.4875,78.3870,17z"
+                            target="_blank" class="map-link">
+                            <i class="fas fa-map-marker-alt"></i> Open in Google Maps
+                        </a>
+
+                        <!-- Directions Link -->
+                        <a href="https://www.google.com/maps/dir//Manjeera+Trinity+Corporate,+JNTU+-+Hitech+City+Rd,+KPHB+Colony,+Kukatpally,+Hyderabad,+Telangana+500072"
+                            target="_blank" class="directions-link">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </a>
                     </div>
-                    
-                    <!-- Map Link -->
-                    <a href="https://www.google.com/maps/place/Manjeera+Trinity+Corporate,+JNTU+-+Hitech+City+Rd,+KPHB+Colony,+Kukatpally,+Hyderabad,+Telangana+500072/@17.4875,78.3870,17z" 
-                       target="_blank" 
-                       class="map-link">
-                        <i class="fas fa-map-marker-alt"></i> Open in Google Maps
-                    </a>
-                    
-                    <!-- Directions Link -->
-                    <a href="https://www.google.com/maps/dir//Manjeera+Trinity+Corporate,+JNTU+-+Hitech+City+Rd,+KPHB+Colony,+Kukatpally,+Hyderabad,+Telangana+500072" 
-                       target="_blank" 
-                       class="directions-link">
-                        <i class="fas fa-directions"></i> Get Directions
-                    </a>
+                </div>
+
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
                 </div>
             </div>
-            
-            <div class="contact-form">
-                <form id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" class="form-control" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn">Send Message</button>
-                </form>
+        </div>
+    </section>
+
+    <!-- Site Analytics Section -->
+    <section class="analytics-section" id="analytics">
+        <div class="container">
+            <div class="analytics-header">
+                <h2>Site Analytics</h2>
+                <p>Real-time insights into website performance</p>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="analytics-stat">
+                    <div class="stat-number" id="totalPageViewsDisplay">1,996,560M</div>
+                    <div class="stat-label">TOTAL PAGEVIEWS SENT</div>
+                </div>
+
+                <div class="analytics-stat">
+                    <div class="stat-number" id="totalUsersDisplay">13,310</div>
+                    <div class="stat-label">NO. OF USERS</div>
+                </div>
+
+                <div class="analytics-stat">
+                    <div class="stat-number" id="totalClicksDisplay">0</div>
+                    <div class="stat-label">TOTAL CLICKS</div>
+                </div>
+
+                <div class="analytics-stat">
+                    <div class="stat-number" id="totalLoginsDisplay">0</div>
+                    <div class="stat-label">TOTAL LOGINS</div>
+                </div>
+
+                <div class="analytics-stat">
+                    <div class="stat-number" id="dailyClicksDisplay">0</div>
+                    <div class="stat-label">DAILY CLICKS</div>
+                </div>
+
+                <div class="analytics-stat">
+                    <div class="stat-number" id="monthlyAverageDisplay">0</div>
+                    <div class="stat-label">MONTHLY AVERAGE</div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <footer>
         <div class="container">
             <div class="footer-container">
                 <div class="footer-column">
                     <h3>Haridra Softtech FashionHub</h3>
-                    <p>Your destination for trendy and affordable fashion. Quality clothing and accessories for every style and occasion.</p>
+                    <p>Your destination for trendy and affordable fashion. Quality clothing and accessories for every
+                        style and occasion.</p>
                 </div>
                 <div class="footer-column">
                     <h3>Quick Links</h3>
@@ -533,33 +669,99 @@
             </div>
         </div>
     </footer>
-   
-     <!-- AI Chatbot Widget -->
-<div id="chatbot" class="chatbot">
-    <div class="chatbot-header">
-      <span>🧠 Haridra AI Assistant</span>
-      <button id="closeChatbot">×</button>
-    </div>
-    <div id="chatbotMessages" class="chatbot-messages"></div>
-    <div class="chatbot-input-area">
-      <input type="text" id="chatbotInput" placeholder="Ask me anything...">
-      <button id="sendChatbotMessage">Send</button>
-    </div>
-  </div>
-  
-  <!-- Chatbot Toggle Button -->
-  <button id="toggleChatbot" class="chatbot-toggle">💬</button>
-  <!-- Newsletter Signup -->
-  <div class="popup-message popup-info" id="newsletterPopup" style="display: none; position: fixed; bottom: 20px; left: 20px; max-width: 350px;">
-    <button class="close-btn" style="position: absolute; top: 5px; right: 10px; background: none; border: none; color: white; font-size: 1.2rem;" onclick="document.getElementById('newsletterPopup').style.display = 'none'">&times;</button>
-    <h4 style="margin-top: 0;">Subscribe to our Newsletter</h4>
-    <p>Get exclusive offers and style tips delivered to your inbox!</p>
-    <div class="form-group" style="margin: 10px 0;">
-        <input type="email" id="newsletterEmail" placeholder="Your email address" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
-    </div>
-    <button class="btn" style="width: 100%; padding: 8px;" onclick="subscribeNewsletter()">Subscribe</button>
-</div>
 
-    <script src="script.js"></script> 
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content product-modal-content">
+            <div class="modal-header">
+                <h2 id="productModalTitle">Product Details</h2>
+                <button class="close-btn" id="closeProductModal">&times;</button>
+            </div>
+            <div class="product-modal-body">
+                <div class="product-modal-image">
+                    <img id="productModalImage" src="" alt="Product Image">
+                    <div class="product-modal-badges">
+                        <span class="discount-badge" id="productModalDiscount" style="display: none;"></span>
+                    </div>
+                </div>
+                <div class="product-modal-details">
+                    <h3 id="productModalName">Product Name</h3>
+                    <div class="product-modal-rating">
+                        <div class="rating-stars" id="productModalRating"></div>
+                        <span class="rating-count" id="productModalRatingCount">(0)</span>
+                    </div>
+                    <div class="product-modal-price">
+                        <span class="current-price" id="productModalPrice">₹0</span>
+                        <span class="original-price" id="productModalOriginalPrice" style="display: none;"></span>
+                    </div>
+                    <div class="product-modal-description">
+                        <h4>Product Description</h4>
+                        <p id="productModalDescription">High-quality product with excellent features and design.</p>
+                    </div>
+                    <div class="product-modal-features">
+                        <h4>Key Features</h4>
+                        <ul id="productModalFeatures">
+                            <li>Premium quality material</li>
+                            <li>Comfortable fit</li>
+                            <li>Durable construction</li>
+                            <li>Easy care instructions</li>
+                        </ul>
+                    </div>
+                    <div class="product-modal-size" id="productModalSizeSection" style="display: none;">
+                        <h4>Select Size</h4>
+                        <div class="size-options" id="productModalSizes">
+                            <button class="size-option" data-size="S">S</button>
+                            <button class="size-option" data-size="M">M</button>
+                            <button class="size-option" data-size="L">L</button>
+                            <button class="size-option" data-size="XL">XL</button>
+                        </div>
+                    </div>
+                    <div class="product-modal-actions">
+                        <button class="add-to-cart-btn" id="productModalAddToCart">
+                            <i class="fas fa-shopping-cart"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn" id="productModalWishlist">
+                            <i class="far fa-heart"></i>
+                            Add to Wishlist
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chatbot Widget -->
+    <div id="chatbot" class="chatbot">
+        <div class="chatbot-header">
+            <span>🧠 Haridra AI Assistant</span>
+            <button id="closeChatbot">×</button>
+        </div>
+        <div id="chatbotMessages" class="chatbot-messages"></div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbotInput" placeholder="Ask me anything...">
+            <button id="sendChatbotMessage">Send</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button id="toggleChatbot" class="chatbot-toggle">💬</button>
+    <!-- Newsletter Signup -->
+    <div class="popup-message popup-info" id="newsletterPopup"
+        style="display: none; position: fixed; bottom: 20px; left: 20px; max-width: 350px;">
+        <button class="close-btn"
+            style="position: absolute; top: 5px; right: 10px; background: none; border: none; color: white; font-size: 1.2rem;"
+            onclick="document.getElementById('newsletterPopup').style.display = 'none'">&times;</button>
+        <h4 style="margin-top: 0;">Subscribe to our Newsletter</h4>
+        <p>Get exclusive offers and style tips delivered to your inbox!</p>
+        <div class="form-group" style="margin: 10px 0;">
+            <input type="email" id="newsletterEmail" placeholder="Your email address"
+                style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+        </div>
+        <button class="btn" style="width: 100%; padding: 8px;" onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
