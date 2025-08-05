@@ -1244,12 +1244,36 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'auto';
         }
     });
+
+    // Category filter buttons functionality
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const category = btn.getAttribute('data-category');
+            filterByCategory(category);
+        });
+    });
+
+    // Back arrow functionality
+    const backArrowBtn = document.getElementById('backArrowBtn');
+    if (backArrowBtn) {
+        backArrowBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Back arrow clicked'); // Debug log
+            // Return to featured categories view
+            backToCategories();
+        });
+    } else {
+        console.log('Back arrow button not found'); // Debug log
+    }
 });
 
 // Make functions available globally for HTML onclick attributes
 window.editAddress = editAddress;
 window.deleteAddress = deleteAddress;
 window.showDashboardSection = showDashboardSection;
+window.filterByCategory = filterByCategory;
+window.backToCategories = backToCategories;
 
 // Address Validation Function
 function validateAddressForm(form) {
@@ -3635,9 +3659,18 @@ function createProductCard(product) {
 
 // Category Filter Functions
 function filterByCategory(category) {
+    console.log('filterByCategory called with category:', category); // Debug log
     const filterBtns = document.querySelectorAll('.filter-btn');
     const featuredCategories = document.querySelector('.featured-categories');
     const allProductsContainer = document.getElementById('productsContainer');
+    const backArrowContainer = document.getElementById('backArrowContainer');
+
+    console.log('Elements found:', {
+        filterBtns: filterBtns.length,
+        featuredCategories: !!featuredCategories,
+        allProductsContainer: !!allProductsContainer,
+        backArrowContainer: !!backArrowContainer
+    }); // Debug log
 
     // Update active filter button
     filterBtns.forEach(btn => {
@@ -3648,13 +3681,15 @@ function filterByCategory(category) {
     });
 
     if (category === 'all') {
-        // Show featured categories
-        featuredCategories.style.display = 'block';
-        allProductsContainer.style.display = 'none';
+        // Show featured categories and hide back arrow
+        if (featuredCategories) featuredCategories.style.display = 'block';
+        if (allProductsContainer) allProductsContainer.style.display = 'none';
+        if (backArrowContainer) backArrowContainer.style.display = 'none';
     } else {
-        // Hide featured categories and show filtered products
-        featuredCategories.style.display = 'none';
-        allProductsContainer.style.display = 'grid';
+        // Hide featured categories, show filtered products and back arrow
+        if (featuredCategories) featuredCategories.style.display = 'none';
+        if (allProductsContainer) allProductsContainer.style.display = 'grid';
+        if (backArrowContainer) backArrowContainer.style.display = 'block';
 
         // Filter and display products
         const filteredProducts = products.filter(p => p.category === category);
@@ -3662,7 +3697,16 @@ function filterByCategory(category) {
     }
 
     // Scroll to products section
-    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+    const productsSection = document.getElementById('products');
+    if (productsSection) {
+        productsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Back to Categories Function
+function backToCategories() {
+    console.log('backToCategories function called'); // Debug log
+    filterByCategory('all');
 }
 
 function renderAllProducts(productsToRender = products) {
