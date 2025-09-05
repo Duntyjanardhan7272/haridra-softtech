@@ -4009,3 +4009,90 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setupCategoryFilters();
 });
+
+/* ===== SPA Router for Info Pages (hash-based) ===== */
+(function(){
+  const routes = {
+    "customer-service": "customerServiceSection",
+    "shipping-policy": "shippingPolicySection",
+    "returns-exchanges": "returnsExchangesSection",
+    "size-guide": "sizeGuideSection",
+    "faqs": "faqsSection"
+  };
+  const siteSectionIds = ["home","categories","products","about","contact","analytics"];
+
+  function show(el, flag) {
+    if (!el) return;
+    el.style.display = flag ? "block" : "none";
+    el.setAttribute("aria-hidden", flag ? "false" : "true");
+  }
+
+  function showHome(){
+    // Hide info pages
+    document.querySelectorAll(".info-page").forEach(el => show(el, false));
+    // Show main site sections
+    siteSectionIds.forEach(id => {
+      const s = document.getElementById(id);
+      if (s) show(s, true);
+    });
+    // Optional: Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function showInfo(sectionId){
+    // Hide main sections
+    siteSectionIds.forEach(id => {
+      const s = document.getElementById(id);
+      if (s) show(s, false);
+    });
+    // Hide all info pages first
+    document.querySelectorAll(".info-page").forEach(el => show(el, false));
+    // Show target info page
+    const target = document.getElementById(sectionId);
+    if (target) {
+      show(target, true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      showHome();
+    }
+  }
+
+  function renderRoute(){
+    const hash = (location.hash || "").replace(/^#\/?/, "");
+    if (!hash) { showHome(); return; }
+    const sectionId = routes[hash];
+    if (sectionId) showInfo(sectionId);
+    else showHome();
+  }
+
+  // Initial render + on hash changes
+  window.addEventListener("hashchange", renderRoute);
+  document.addEventListener("DOMContentLoaded", renderRoute);
+})();
+/* ===== End SPA Router ===== */
+
+
+// 🔹 Homepage Analytics Tracking
+let pageViews = parseInt(localStorage.getItem("miniPageViews") || "0", 10);
+let totalClicks = parseInt(localStorage.getItem("miniTotalClicks") || "0", 10);
+
+// Increment page views
+pageViews++;
+localStorage.setItem("miniPageViews", pageViews);
+
+// Update homepage counters
+function updateHomeAnalytics() {
+  const viewsEl = document.getElementById("homePageViews");
+  const clicksEl = document.getElementById("homeTotalClicks");
+  if (viewsEl) viewsEl.textContent = pageViews;
+  if (clicksEl) clicksEl.textContent = totalClicks;
+}
+
+updateHomeAnalytics();
+
+// Update clicks in real time
+document.addEventListener("click", () => {
+  totalClicks++;
+  localStorage.setItem("miniTotalClicks", totalClicks);
+  updateHomeAnalytics();
+});
