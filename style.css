@@ -3353,13 +3353,14 @@ body.dark-mode {
 /* Header Gradient */
 header {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Nav link underline animation */
 nav ul li a {
     position: relative;
 }
+
 nav ul li a::after {
     content: "";
     position: absolute;
@@ -3370,6 +3371,7 @@ nav ul li a::after {
     background: var(--secondary-color);
     transition: width 0.3s;
 }
+
 nav ul li a:hover::after {
     width: 100%;
 }
@@ -3379,46 +3381,56 @@ nav ul li a:hover::after {
     border-radius: 30px;
     padding: 0.6rem 1rem;
     border: 1px solid #ddd;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Hero Button Glow */
 .hero .btn {
     background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
     font-size: 1.2rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
+
 .hero .btn:hover {
     box-shadow: 0 0 20px var(--secondary-color), 0 0 40px var(--accent-color);
     transform: scale(1.05);
 }
 
 /* Category & Product Cards */
-.category-card, .product-card {
+.category-card,
+.product-card {
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transition: all 0.4s ease;
 }
-.category-card:hover, .product-card:hover {
+
+.category-card:hover,
+.product-card:hover {
     transform: translateY(-12px) scale(1.03);
     border-color: var(--accent-color);
 }
 
 /* Neon Buttons */
-.btn, .login-btn, .checkout-btn {
+.btn,
+.login-btn,
+.checkout-btn {
     background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
     color: white;
     font-weight: bold;
     transition: all 0.3s ease;
 }
-.btn:hover, .login-btn:hover, .checkout-btn:hover {
+
+.btn:hover,
+.login-btn:hover,
+.checkout-btn:hover {
     box-shadow: 0 0 15px var(--secondary-color), 0 0 30px var(--accent-color);
     transform: translateY(-3px);
 }
 
 /* Sidebars Glass Effect */
-.cart-sidebar, .profile-sidebar {
-    background: rgba(255,255,255,0.85);
+.cart-sidebar,
+.profile-sidebar {
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
 }
 
@@ -3426,9 +3438,11 @@ nav ul li a:hover::after {
 footer {
     border-top: 3px solid var(--secondary-color);
 }
+
 .footer-column ul li a {
     position: relative;
 }
+
 .footer-column ul li a::after {
     content: "";
     position: absolute;
@@ -3439,56 +3453,64 @@ footer {
     background: var(--secondary-color);
     transition: width 0.3s;
 }
+
 .footer-column ul li a:hover::after {
     width: 100%;
 }
 
 /* Info Pages */
 .info-page {
-  display: none;
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    display: none;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
-.info-page h1 { color: var(--primary-color); margin-bottom: 1rem; }
-.back-btn { margin-bottom: 1rem; }
+
+.info-page h1 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.back-btn {
+    margin-bottom: 1rem;
+}
 
 /* Homepage Site Analytics */
 .site-analytics-home {
-  background: #fff;
-  padding: 2rem 1rem;
-  margin: 2rem auto;
-  max-width: 600px;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: #fff;
+    padding: 2rem 1rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .site-analytics-home h2 {
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--primary-color);
 }
 
 .analytics-summary {
-  display: flex;
-  justify-content: space-around;
-  gap: 2rem;
+    display: flex;
+    justify-content: space-around;
+    gap: 2rem;
 }
 
 .analytics-box {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--dark-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--dark-color);
 }
 
 .analytics-box i {
-  color: var(--secondary-color);
-  font-size: 1.2rem;
+    color: var(--secondary-color);
+    font-size: 1.2rem;
 }
